@@ -1,3 +1,7 @@
+venv/
+tempData/
+data/
+.DS_Stores
 .venv
 Cargo.lock
 /target
