@@ -2,3 +2,9 @@ venv/
 tempData/
 data/
 .DS_Stores
+.venv
+Cargo.lock
+Cargo.toml
+pyproject.toml
+/target
+.github
