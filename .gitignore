@@ -1,0 +1,6 @@
+.venv
+Cargo.lock
+Cargo.toml
+pyproject.toml
+/target
+.github

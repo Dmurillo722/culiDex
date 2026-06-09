@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from pathlib import Path
 
+import culidex
+
 class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -50,9 +52,11 @@ class Application(tk.Frame):
         self.search_entry.bind("<Return>", self._search)
         tk.Button(search_frame, text="Search", command=self._search, font=("Arial", 12)).pack(side=tk.LEFT)
     def _search(self):
-        ingredient = self.search_entry.get().strip()
-        if not ingredient:
-            return
+        #ingredient = self.search_entry.get().strip()
+        result = culidex.test_search()
+        print(result)
+        # if not ingredient:
+        #     return
 
 app = Application()
 app.mainloop()
