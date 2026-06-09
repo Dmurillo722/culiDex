@@ -16,6 +16,13 @@
    maturin init
 ```
 
+5. Run this command for initialization and when modifying:
+
+```bash
+maturin develop
+```
+
+
 ---
 
 ### Development
