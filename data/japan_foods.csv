@@ -1,0 +1,97 @@
+name,category,country,energy_kcal,water_g,protein_g,fat_total_g,carb_g,fiber_g,sugars_total_g,fat_saturated_g,fat_monounsat_g,fat_polyunsat_g,cholesterol_mg,glucose_g,fructose_g,sucrose_g,lactose_g,sodium_mg,potassium_mg,calcium_mg,magnesium_mg,iron_mg,zinc_mg,phosphorus_mg,vitamin_c_mg,niacin_mg,thiamin_mg,riboflavin_mg,vitamin_b6_mg
+Gobo (burdock root),Vegetables and Vegetable Products,Japan,72.0,80.1,1.53,0.15,17.3,3.3,,0.025,0.037,0.059,0.0,,,,,5.0,308.0,41.0,38.0,0.8,0.33,51.0,3.0,0.3,0.01,0.03,0.24
+"Satoimo (taro, Japanese)",Vegetables and Vegetable Products,Japan,58.0,84.0,1.5,0.1,13.1,2.3,0.5,0.02,0.01,0.04,0.0,,,0.5,0.0,1.0,640.0,10.0,17.0,0.5,0.3,55.0,6.0,0.5,0.07,0.03,0.2
+Nagaimo / Yamaimo (Japanese mountain yam),Vegetables and Vegetable Products,Japan,65.0,82.6,2.2,0.3,13.9,1.0,,0.07,0.03,0.1,0.0,,,,0.0,7.0,590.0,16.0,17.0,0.4,0.3,72.0,6.0,0.4,0.1,0.02,0.09
+Konnyaku (konjac block),Vegetables and Vegetable Products,Japan,5.0,97.3,0.1,0.0,2.3,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,10.0,33.0,43.0,2.0,0.4,0.1,5.0,0.0,0.0,0.0,0.0,0.0
+Shirataki / Ito-konnyaku (konjac noodles),Vegetables and Vegetable Products,Japan,6.0,96.5,0.2,0.0,3.0,2.9,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,10.0,12.0,75.0,2.0,0.5,0.1,10.0,0.0,0.0,0.0,0.0,0.0
+Renkon (lotus root),Vegetables and Vegetable Products,Japan,74.0,79.1,2.6,0.1,17.2,4.9,,0.03,0.02,0.02,0.0,,,,,40.0,556.0,45.0,23.0,1.16,0.39,100.0,44.0,0.4,0.16,0.22,0.258
+Wasabi root (fresh),Vegetables and Vegetable Products,Japan,109.0,69.1,4.8,0.63,23.5,7.8,,,,,0.0,,,,,17.0,568.0,128.0,69.0,1.03,1.62,80.0,41.9,0.743,0.131,0.114,0.274
+Myoga (Japanese ginger bud),Vegetables and Vegetable Products,Japan,12.0,95.6,0.9,0.1,2.6,2.1,0.3,0.01,0.01,0.04,0.0,0.1,0.1,0.1,0.0,1.0,210.0,25.0,15.0,0.5,0.4,37.0,2.0,0.3,0.05,0.05,0.04
+Kuzu starch (kuzuko),Cereal Grains and Pasta,Japan,346.0,14.0,0.2,0.1,85.0,0.3,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,10.0,40.0,3.0,0.3,0.07,5.0,0.0,0.0,0.0,0.0,0.0
+"Shiso / perilla leaves, green (aojiso)",Vegetables and Vegetable Products,Japan,37.0,86.7,3.9,0.1,7.2,7.3,0.0,0.01,0.01,0.07,0.0,0.0,0.0,0.0,0.0,1.0,500.0,230.0,70.0,1.7,1.3,70.0,26.0,1.0,0.13,0.34,0.19
+Mitsuba (Japanese parsley/trefoil),Vegetables and Vegetable Products,Japan,18.0,93.4,1.8,0.1,4.1,2.3,0.6,0.01,0.01,0.05,0.0,0.2,0.2,0.2,0.0,1.0,500.0,47.0,20.0,0.7,0.2,50.0,21.0,0.5,0.08,0.11,0.1
+Nira (garlic chives),Vegetables and Vegetable Products,Japan,21.0,92.6,1.7,0.3,4.0,2.7,1.8,0.04,0.02,0.17,0.0,0.6,0.6,0.4,0.0,1.0,510.0,48.0,18.0,0.7,0.3,42.0,19.0,0.6,0.06,0.13,0.16
+Komatsuna (Japanese mustard spinach),Vegetables and Vegetable Products,Japan,23.0,92.2,2.2,0.3,3.9,2.8,,0.015,0.138,0.057,0.0,,,,,21.0,449.0,210.0,11.0,1.5,0.17,28.0,130.0,0.678,0.068,0.093,0.153
+Mizuna,Vegetables and Vegetable Products,Japan,23.0,91.4,2.2,0.4,4.8,3.0,1.2,0.04,0.03,0.18,0.0,0.4,0.4,0.4,0.0,36.0,480.0,210.0,31.0,2.1,0.4,64.0,55.0,1.2,0.08,0.15,0.12
+Shungiku (chrysanthemum greens),Vegetables and Vegetable Products,Japan,24.0,91.4,3.36,0.56,3.02,3.0,,,,,0.0,,,,,118.0,567.0,117.0,32.0,2.29,0.71,54.0,1.4,0.531,0.13,0.144,0.176
+Nanohana (rapeseed blossoms),Vegetables and Vegetable Products,Japan,33.0,88.4,4.4,0.2,5.8,4.2,1.3,0.02,0.01,0.1,0.0,0.4,0.4,0.5,0.0,16.0,390.0,160.0,29.0,2.9,0.8,86.0,130.0,1.0,0.16,0.28,0.24
+Takenoko (fresh bamboo shoots),Vegetables and Vegetable Products,Japan,27.0,91.0,2.6,0.3,5.2,2.2,,0.069,0.007,0.134,0.0,,,,,4.0,533.0,13.0,3.0,0.5,1.1,59.0,4.0,0.6,0.15,0.07,0.24
+Fuki (butterbur stalks),Vegetables and Vegetable Products,Japan,15.0,94.5,0.39,0.04,3.61,,,,,,0.0,,,,,7.0,655.0,103.0,14.0,0.1,0.16,12.0,31.5,0.2,0.02,0.02,0.096
+Warabi (bracken fiddleheads),Vegetables and Vegetable Products,Japan,34.0,88.7,4.55,0.4,5.54,,,,,,0.0,,,,,1.0,370.0,32.0,34.0,1.31,0.83,101.0,26.6,4.98,0.02,0.21,
+Zenmai (royal fern shoots),Vegetables and Vegetable Products,Japan,21.0,92.3,2.4,0.1,4.7,3.4,0.4,0.01,0.01,0.06,0.0,0.2,0.2,0.0,0.0,1.0,340.0,30.0,20.0,0.5,0.5,48.0,32.0,1.4,0.02,0.17,0.07
+Udo (Japanese spikenard shoots),Vegetables and Vegetable Products,Japan,18.0,93.2,0.8,0.1,4.3,1.4,0.7,0.01,0.01,0.04,0.0,0.3,0.3,0.1,0.0,1.0,220.0,9.0,5.0,0.2,0.2,10.0,4.0,0.2,0.03,0.03,0.09
+Negi (Japanese long onion),Vegetables and Vegetable Products,Japan,32.0,89.8,1.83,0.19,7.34,2.6,,0.032,0.027,0.074,0.0,,,,,16.0,276.0,72.0,20.0,1.48,0.39,37.0,18.8,0.525,0.055,0.08,0.061
+Wakegi (green onion variety),Vegetables and Vegetable Products,Japan,32.0,89.8,1.83,0.19,7.34,2.6,,0.032,0.027,0.074,0.0,,,,,16.0,276.0,72.0,20.0,1.48,0.39,37.0,18.8,0.525,0.055,0.08,0.061
+Rakkyo (Japanese shallot),Vegetables and Vegetable Products,Japan,72.0,79.8,2.5,0.1,16.8,3.2,,0.017,0.014,0.039,0.0,,,,,12.0,334.0,37.0,21.0,1.2,0.4,60.0,8.0,0.2,0.06,0.02,0.345
+Maitake mushrooms,Vegetables and Vegetable Products,Japan,31.0,90.4,1.94,0.19,6.97,2.7,,0.03,0.03,0.09,0.0,1.74,0.0,0.0,0.33,1.0,204.0,1.0,10.0,0.3,0.75,74.0,0.0,6.58,0.146,0.242,0.056
+Enoki mushrooms,Vegetables and Vegetable Products,Japan,37.0,88.3,2.66,0.29,7.81,2.7,,0.027,0.0,0.124,0.0,0.22,0.0,0.0,0.0,3.0,359.0,0.0,16.0,1.15,0.65,105.0,0.0,7.03,0.225,0.2,0.1
+Shimeji mushrooms,Vegetables and Vegetable Products,Japan,22.0,91.1,2.7,0.5,4.9,3.0,0.7,0.06,0.03,0.26,0.0,0.2,0.1,0.4,0.0,3.0,370.0,1.0,11.0,0.5,0.6,98.0,0.0,5.2,0.16,0.17,0.12
+Nameko mushrooms,Vegetables and Vegetable Products,Japan,15.0,92.1,1.7,0.1,5.4,3.3,1.1,0.01,0.01,0.05,0.0,0.4,0.3,0.3,0.0,0.0,230.0,4.0,7.0,0.7,0.7,61.0,0.0,4.7,0.07,0.14,0.07
+Matsutake mushrooms,Vegetables and Vegetable Products,Japan,23.0,88.3,2.0,0.6,8.2,4.7,1.2,0.09,0.06,0.22,0.0,0.5,0.4,0.3,0.0,2.0,410.0,6.0,9.0,1.3,0.9,40.0,0.0,5.0,0.1,0.1,0.11
+Eringi / king oyster mushroom,Vegetables and Vegetable Products,Japan,24.0,90.2,2.8,0.4,6.0,3.4,1.0,0.05,0.03,0.21,0.0,0.3,0.2,0.3,0.0,3.0,340.0,1.0,12.0,0.3,0.5,100.0,0.0,6.1,0.11,0.22,0.14
+Shiitake mushrooms (raw),Vegetables and Vegetable Products,Japan,34.0,89.7,2.24,0.49,6.79,2.5,,,,,,2.38,0.0,0.0,0.0,9.0,304.0,2.0,20.0,0.41,1.03,112.0,,3.88,0.015,0.217,0.293
+Shiitake mushrooms (dried),Vegetables and Vegetable Products,Japan,296.0,9.5,9.58,0.99,75.4,11.5,,0.225,0.317,0.151,0.0,,,,,13.0,1530.0,11.0,132.0,1.72,7.66,294.0,3.5,14.1,0.3,1.27,0.965
+Kabocha (Japanese pumpkin),Vegetables and Vegetable Products,Japan,91.0,76.2,1.9,0.1,20.6,2.8,3.4,0.05,0.01,0.01,0.0,1.1,1.1,1.2,0.0,1.0,450.0,15.0,25.0,0.5,0.3,43.0,43.0,0.9,0.07,0.09,0.116
+Nasu (Japanese eggplant),Vegetables and Vegetable Products,Japan,25.0,92.3,0.98,0.18,5.88,3.0,,0.034,0.016,0.076,0.0,1.58,1.54,0.26,,2.0,229.0,9.0,14.0,0.23,0.16,24.0,2.2,0.649,0.039,0.037,0.084
+Shishito peppers,Vegetables and Vegetable Products,Japan,27.0,91.4,1.6,0.3,6.1,3.6,2.4,0.05,0.02,0.14,0.0,1.0,1.0,0.4,0.0,1.0,340.0,11.0,20.0,0.5,0.4,38.0,57.0,0.8,0.09,0.05,0.27
+Manganji togarashi (sweet frying pepper),Vegetables and Vegetable Products,Japan,29.0,91.0,1.7,0.3,6.5,3.3,2.8,0.05,0.02,0.15,0.0,1.2,1.2,0.4,0.0,1.0,350.0,12.0,19.0,0.4,0.3,35.0,68.0,0.8,0.08,0.05,0.25
+"Kombu (kelp, for dashi)",Seaweed and Sea Vegetables,Japan,43.0,81.6,1.68,0.56,9.57,1.3,,0.247,0.098,0.047,0.0,,,,,233.0,89.0,168.0,121.0,2.85,1.23,42.0,3.0,0.47,0.05,0.15,0.002
+Wakame (fresh salted),Seaweed and Sea Vegetables,Japan,45.0,80.0,3.03,0.64,9.14,0.5,,0.13,0.058,0.218,0.0,,,,,872.0,50.0,150.0,107.0,2.18,0.38,80.0,3.0,1.6,0.06,0.23,0.002
+Hijiki seaweed (dried),Seaweed and Sea Vegetables,Japan,180.0,6.5,9.2,3.2,58.4,51.8,0.0,0.6,0.3,1.0,0.0,,,,0.0,1800.0,4400.0,1400.0,640.0,6.2,1.0,96.0,0.0,1.8,0.09,0.42,0.3
+Mozuku seaweed,Seaweed and Sea Vegetables,Japan,4.0,97.7,0.2,0.0,1.4,1.4,0.0,0.0,0.0,0.0,0.0,,,,0.0,400.0,8.0,22.0,10.0,0.1,0.1,14.0,0.0,0.0,0.0,0.0,0.0
+Aonori (dried green seaweed flakes),Seaweed and Sea Vegetables,Japan,149.0,6.4,29.4,5.2,41.7,35.2,,0.8,0.4,2.5,0.0,,,,0.0,3200.0,2500.0,720.0,1200.0,77.0,1.6,390.0,0.0,10.0,0.92,1.66,0.14
+"Nori (dried, sushi-grade)",Seaweed and Sea Vegetables,Japan,35.0,85.0,5.81,0.28,5.11,0.3,,0.061,0.025,0.11,0.0,,,,,48.0,356.0,70.0,2.0,1.8,1.05,58.0,39.0,1.47,0.098,0.446,0.159
+Mekabu (wakame root frills),Seaweed and Sea Vegetables,Japan,11.0,94.2,1.0,0.5,3.4,3.4,0.0,0.07,0.05,0.21,0.0,,,,0.0,490.0,130.0,100.0,64.0,0.5,0.4,32.0,0.0,0.4,0.04,0.11,0.01
+Kanten / Agar-agar (raw),Seaweed and Sea Vegetables,Japan,26.0,91.3,0.54,0.03,6.75,0.5,,0.006,0.003,0.01,0.0,,,,,9.0,226.0,54.0,67.0,1.86,0.58,5.0,0.0,0.055,0.005,0.022,0.032
+Kanten / Agar-agar (dried),Seaweed and Sea Vegetables,Japan,306.0,8.68,6.21,0.3,80.9,7.7,,0.061,0.027,0.102,0.0,,,,,102.0,1120.0,625.0,770.0,21.4,5.8,52.0,0.0,0.202,0.01,0.222,0.303
+Katsuobushi (dried bonito flakes),Finfish and Shellfish Products,Japan,357.0,15.2,77.1,2.9,0.8,0.0,0.0,0.9,0.7,0.9,207.0,0.0,0.0,0.0,0.0,130.0,940.0,28.0,70.0,8.0,2.8,790.0,0.0,45.0,0.55,0.35,0.64
+"Niboshi / Iriko (dried sardines, for dashi)",Finfish and Shellfish Products,Japan,332.0,15.7,64.5,6.2,0.3,0.0,0.0,1.6,1.5,2.4,550.0,0.0,0.0,0.0,0.0,1700.0,1200.0,2200.0,230.0,18.0,7.2,1500.0,0.0,18.0,0.1,0.33,0.29
+Sakura ebi (dried pink shrimp),Finfish and Shellfish Products,Japan,312.0,10.0,64.9,4.0,0.0,0.0,0.0,0.7,0.6,1.5,700.0,0.0,0.0,0.0,0.0,700.0,710.0,2000.0,110.0,1.0,4.0,1400.0,0.0,7.5,0.12,0.14,0.12
+Chirimen jako (dried whitebait),Finfish and Shellfish Products,Japan,206.0,40.0,40.5,3.0,0.0,0.0,0.0,0.8,0.7,1.1,390.0,0.0,0.0,0.0,0.0,2600.0,490.0,520.0,130.0,1.0,1.5,860.0,0.0,8.3,0.04,0.16,0.09
+Tarako / Mentaiko (salted pollock roe),Finfish and Shellfish Products,Japan,140.0,67.0,21.0,4.7,0.4,0.0,0.0,1.0,1.1,1.8,350.0,0.0,0.0,0.0,0.0,1900.0,300.0,24.0,25.0,0.8,1.5,390.0,2.0,4.3,0.23,0.35,0.29
+"Ikura (salmon roe, Japanese-style salted)",Finfish and Shellfish Products,Japan,272.0,48.4,32.6,15.6,0.2,0.0,0.0,2.8,3.9,6.6,480.0,0.0,0.0,0.0,0.0,910.0,230.0,94.0,20.0,2.0,2.9,530.0,0.0,0.8,0.04,0.43,0.16
+Kamaboko (steamed fish cake),Finfish and Shellfish Products,Japan,95.0,74.4,12.0,0.9,9.7,0.0,0.5,0.2,0.2,0.4,15.0,0.0,0.0,0.5,0.0,1000.0,110.0,25.0,16.0,0.3,0.4,120.0,0.0,0.5,0.02,0.03,0.03
+Chikuwa (grilled tube fish cake),Finfish and Shellfish Products,Japan,121.0,68.6,12.2,2.0,13.5,0.0,3.8,0.5,0.5,0.7,17.0,0.8,0.7,2.3,0.0,840.0,160.0,15.0,19.0,0.3,0.5,120.0,0.0,0.9,0.03,0.05,0.04
+Satsuma-age (fried fish cake),Finfish and Shellfish Products,Japan,134.0,65.4,12.5,6.2,13.9,0.9,2.0,1.2,1.8,2.5,25.0,0.5,0.5,1.0,0.0,620.0,150.0,70.0,24.0,0.5,0.5,130.0,0.0,1.3,0.05,0.06,0.05
+Hanpen (white fish cake),Finfish and Shellfish Products,Japan,94.0,75.4,9.9,1.0,11.6,0.0,0.7,0.2,0.2,0.4,15.0,0.0,0.0,0.7,0.0,790.0,160.0,13.0,15.0,0.2,0.3,110.0,0.0,0.6,0.02,0.04,0.04
+Narutomaki (spiral fish cake),Finfish and Shellfish Products,Japan,94.0,74.9,7.6,1.0,14.8,0.0,1.2,0.2,0.2,0.4,15.0,0.0,0.0,1.2,0.0,960.0,110.0,23.0,16.0,0.4,0.4,110.0,0.0,0.5,0.02,0.03,0.03
+Natto (fermented soybeans),Legumes and Legume Products,Japan,211.0,55.0,19.4,11.0,12.7,5.4,,1.59,2.43,6.21,0.0,,,,,7.0,729.0,217.0,115.0,8.6,3.03,174.0,13.0,0.0,0.16,0.19,0.13
+Shiro miso (white miso),"Condiments, Sauces, and Seasonings",Japan,216.0,42.6,9.7,3.0,37.9,2.3,22.2,0.4,0.6,1.7,0.0,6.0,6.0,10.0,0.0,2400.0,340.0,80.0,32.0,1.6,0.9,120.0,0.0,0.8,0.04,0.1,0.09
+Aka miso (red miso),"Condiments, Sauces, and Seasonings",Japan,186.0,45.4,13.1,5.5,21.1,4.1,4.7,0.8,1.1,3.1,0.0,0.0,0.5,4.2,0.0,5100.0,440.0,130.0,75.0,4.0,1.8,250.0,0.0,1.7,0.05,0.14,0.13
+Mugi miso (barley miso),"Condiments, Sauces, and Seasonings",Japan,198.0,44.0,9.7,4.3,30.0,6.5,6.8,0.6,0.8,2.4,0.0,1.0,1.5,4.3,0.0,4200.0,330.0,80.0,55.0,3.0,1.5,170.0,0.0,1.4,0.07,0.16,0.11
+Hatcho miso,"Condiments, Sauces, and Seasonings",Japan,217.0,38.5,17.2,10.5,14.5,6.5,1.5,1.5,2.3,5.9,0.0,0.0,0.5,1.0,0.0,4300.0,490.0,150.0,95.0,6.8,2.5,300.0,0.0,2.0,0.05,0.15,0.14
+Kinako (roasted soybean flour),Legumes and Legume Products,Japan,451.0,2.6,36.7,25.7,28.5,16.9,10.7,3.7,5.7,14.7,0.0,0.4,0.2,4.6,0.0,1.0,2000.0,190.0,260.0,8.0,3.5,660.0,0.0,2.3,0.1,0.16,0.36
+Yuba (fresh tofu skin / nama yuba),Legumes and Legume Products,Japan,218.0,55.3,21.8,13.7,4.1,0.8,1.9,2.0,3.1,7.7,0.0,0.3,0.3,1.3,0.0,10.0,240.0,150.0,57.0,3.6,1.9,290.0,0.0,0.5,0.06,0.09,0.07
+Abura-age (thin fried tofu),Legumes and Legume Products,Japan,386.0,39.9,15.3,34.4,0.4,1.3,0.2,5.0,8.0,19.4,0.0,0.0,0.0,0.2,0.0,4.0,120.0,300.0,55.0,3.2,1.7,190.0,0.0,0.3,0.08,0.04,0.08
+Atsu-age (thick fried tofu),Legumes and Legume Products,Japan,150.0,68.2,10.7,11.3,0.2,0.8,0.2,1.7,2.7,6.4,0.0,0.0,0.0,0.2,0.0,5.0,130.0,240.0,43.0,2.6,1.4,150.0,0.0,0.2,0.08,0.04,0.08
+Ganmodoki (fried tofu fritters),Legumes and Legume Products,Japan,223.0,62.1,15.3,17.8,1.6,1.0,0.8,2.6,4.1,10.1,0.0,0.0,0.0,0.8,0.0,370.0,150.0,270.0,65.0,3.6,1.9,200.0,0.0,0.2,0.09,0.05,0.09
+Okara (soy pulp),Legumes and Legume Products,Japan,77.0,81.6,3.52,1.73,12.2,,,0.193,0.295,0.755,0.0,,,,,9.0,213.0,80.0,26.0,1.3,0.56,60.0,0.0,0.1,0.02,0.02,0.115
+Mirin (hon-mirin),"Condiments, Sauces, and Seasonings",Japan,241.0,47.0,0.3,0.0,43.2,0.0,43.2,0.0,0.0,0.0,0.0,32.0,5.0,5.5,0.0,3.0,54.0,2.0,6.0,0.1,0.0,9.0,0.0,0.1,0.0,0.01,0.01
+Sake (cooking grade),"Condiments, Sauces, and Seasonings",Japan,134.0,78.4,0.5,0.0,5.0,0.0,,0.0,0.0,0.0,0.0,,,,,2.0,25.0,5.0,6.0,0.1,0.02,6.0,0.0,0.0,0.0,0.0,0.0
+Japanese rice vinegar,"Condiments, Sauces, and Seasonings",Japan,25.0,93.3,0.2,0.0,7.4,0.0,0.4,0.0,0.0,0.0,0.0,0.2,0.2,0.0,0.0,6.0,47.0,5.0,4.0,0.1,0.1,24.0,0.0,0.1,0.0,0.01,0.0
+"Karashi (Japanese hot mustard, prepared)","Condiments, Sauces, and Seasonings",Japan,314.0,29.0,14.5,17.0,31.0,7.7,2.5,1.0,10.5,3.7,0.0,0.5,0.5,1.5,0.0,1000.0,370.0,130.0,81.0,5.0,2.0,270.0,0.0,3.4,0.22,0.26,0.27
+Sansho pepper (ground),"Condiments, Sauces, and Seasonings",Japan,375.0,2.4,10.3,6.2,69.6,28.5,0.0,0.6,1.0,3.2,0.0,,,,0.0,4.0,1700.0,750.0,130.0,10.7,1.5,260.0,0.0,,,,
+Kewpie mayonnaise,"Condiments, Sauces, and Seasonings",Japan,669.0,18.1,1.4,74.7,3.8,0.0,3.7,6.7,27.0,38.5,70.0,0.5,0.5,2.7,0.0,830.0,44.0,17.0,7.0,0.3,0.3,56.0,0.0,0.1,0.02,0.05,0.05
+Yuzu juice (raw),"Condiments, Sauces, and Seasonings",Japan,21.0,92.8,0.5,0.1,7.0,0.4,3.8,0.01,0.01,0.04,0.0,1.5,1.5,0.8,0.0,1.0,210.0,20.0,11.0,0.1,0.1,13.0,40.0,0.3,0.06,0.03,0.07
+Sudachi juice (raw),"Condiments, Sauces, and Seasonings",Japan,23.0,91.8,0.5,0.1,7.3,0.5,3.8,0.01,0.01,0.04,0.0,1.5,1.5,0.8,0.0,1.0,160.0,16.0,12.0,0.1,0.1,15.0,40.0,0.2,0.06,0.03,0.07
+Kabosu juice (raw),"Condiments, Sauces, and Seasonings",Japan,24.0,91.2,0.4,0.1,7.8,0.4,3.9,0.01,0.01,0.04,0.0,1.5,1.5,0.9,0.0,1.0,140.0,12.0,10.0,0.1,0.1,12.0,42.0,0.2,0.04,0.02,0.05
+"Japanese short-grain rice (koshihikari, raw)",Cereal Grains and Pasta,Japan,358.0,13.3,6.5,0.52,79.2,,,0.14,0.161,0.138,0.0,,,,,1.0,76.0,3.0,23.0,0.8,1.1,95.0,0.0,1.6,0.07,0.048,0.171
+Mochiko / Shiratamako (glutinous rice flour),Cereal Grains and Pasta,Japan,362.0,12.5,6.4,1.0,79.5,0.5,0.8,0.3,0.3,0.3,0.0,0.0,0.0,0.8,0.0,2.0,90.0,6.0,17.0,0.7,1.4,100.0,0.0,0.8,0.09,0.03,0.09
+Joshinko (non-glutinous rice flour),Cereal Grains and Pasta,Japan,366.0,11.9,5.95,1.42,80.1,2.4,,0.386,0.442,0.379,0.0,,,,,0.0,76.0,10.0,35.0,0.35,0.8,98.0,0.0,2.59,0.138,0.021,0.436
+Katakuriko (potato starch),Cereal Grains and Pasta,Japan,338.0,14.7,0.1,0.1,84.8,0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,34.0,10.0,2.0,0.1,0.1,40.0,0.0,0.0,0.0,0.0,0.0
+Kuzu powder (kuzuko),Cereal Grains and Pasta,Japan,346.0,14.0,0.2,0.1,85.0,0.3,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,10.0,40.0,3.0,0.3,0.07,5.0,0.0,0.0,0.0,0.0,0.0
+Panko (Japanese breadcrumbs),Cereal Grains and Pasta,Japan,373.0,12.5,12.9,5.3,70.4,2.5,3.6,1.0,1.3,2.3,0.0,0.5,0.5,2.6,0.1,680.0,140.0,30.0,24.0,0.9,0.7,95.0,0.0,1.7,0.11,0.05,0.04
+"Soba (buckwheat noodles, dry)",Cereal Grains and Pasta,Japan,336.0,6.88,14.4,0.71,74.6,,,0.136,0.185,0.22,0.0,,,,,792.0,252.0,35.0,95.0,2.7,1.71,254.0,0.0,3.21,0.48,0.13,0.24
+"Somen (fine wheat noodles, dry)",Cereal Grains and Pasta,Japan,356.0,9.21,11.4,0.81,74.1,4.3,,0.115,0.095,0.33,0.0,,,,,1840.0,164.0,23.0,28.0,1.32,0.45,80.0,0.0,0.875,0.101,0.026,0.05
+"Udon (wheat noodles, raw/fresh)",Cereal Grains and Pasta,Japan,270.0,33.0,8.5,1.1,55.6,2.0,1.0,0.2,0.2,0.5,0.0,0.2,0.2,0.6,0.0,800.0,90.0,20.0,18.0,0.6,0.5,85.0,0.0,0.9,0.11,0.03,0.05
+"Hiyamugi (thin wheat noodles, dry)",Cereal Grains and Pasta,Japan,333.0,14.0,9.5,1.4,72.0,2.9,1.2,0.2,0.2,0.6,0.0,0.2,0.2,0.8,0.0,1500.0,130.0,18.0,24.0,0.9,0.4,70.0,0.0,0.8,0.1,0.03,0.04
+"Umeboshi (pickled plum, salted)",Vegetables and Vegetable Products,Japan,33.0,72.1,0.9,0.2,10.5,3.6,6.0,0.02,0.12,0.04,0.0,2.5,2.5,1.0,0.0,8700.0,440.0,33.0,17.0,1.0,0.1,14.0,3.0,0.4,0.02,0.05,0.04
+Beni shoga (red pickled ginger),Vegetables and Vegetable Products,Japan,32.0,83.2,0.5,0.1,8.6,2.3,4.0,0.01,0.01,0.03,0.0,1.5,1.5,1.0,0.0,2700.0,180.0,17.0,13.0,0.5,0.3,18.0,3.0,0.3,0.02,0.03,0.05
+Kanpyo (dried gourd strips),Vegetables and Vegetable Products,Japan,277.0,7.0,6.3,0.2,79.7,30.1,28.0,0.03,0.02,0.07,0.0,10.0,10.0,8.0,0.0,37.0,1600.0,250.0,110.0,2.9,0.5,100.0,20.0,3.1,0.26,0.32,0.19
+Kiriboshi daikon (dried shredded daikon),Vegetables and Vegetable Products,Japan,301.0,8.4,9.7,0.8,69.7,21.3,28.0,0.1,0.1,0.3,0.0,10.0,10.0,8.0,0.0,280.0,3500.0,500.0,160.0,3.1,0.9,230.0,31.0,5.0,0.22,0.27,0.32
+Toasted sesame seeds (iri-goma),Nut and Seed Products,Japan,599.0,1.6,19.8,53.8,18.5,12.6,0.5,7.5,19.5,24.3,0.0,0.2,0.1,0.2,0.0,2.0,410.0,1200.0,360.0,9.9,5.5,540.0,0.0,5.4,0.49,0.23,0.64
+Fu (dried wheat gluten / yakifu),Cereal Grains and Pasta,Japan,385.0,12.0,28.5,2.7,58.7,2.3,1.4,0.4,0.4,1.1,0.0,0.3,0.3,0.8,0.0,210.0,130.0,44.0,32.0,3.4,1.6,160.0,0.0,1.1,0.1,0.08,0.07
+"Anko / Tsubuan (sweet red bean paste, chunky)",Sweets,Japan,239.0,38.0,5.6,0.6,54.0,6.8,42.0,0.1,0.1,0.3,0.0,12.0,12.0,18.0,0.0,1.0,200.0,26.0,30.0,1.6,0.6,62.0,0.0,0.4,0.04,0.05,0.05
+Koshian (smooth sweet red bean paste),Sweets,Japan,147.0,60.0,4.4,0.4,32.0,3.8,21.0,0.06,0.06,0.18,0.0,5.0,5.0,11.0,0.0,1.0,120.0,13.0,18.0,1.2,0.5,52.0,0.0,0.3,0.03,0.03,0.03
+Mochi (fresh pounded rice cake),Sweets,Japan,235.0,44.5,4.0,0.6,50.3,0.5,0.5,0.1,0.1,0.2,0.0,0.1,0.1,0.3,0.0,2.0,52.0,4.0,11.0,0.3,1.0,56.0,0.0,0.5,0.04,0.01,0.04
+Warabimochi starch,Sweets,Japan,338.0,14.7,0.1,0.1,84.8,0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,10.0,10.0,2.0,0.1,0.1,5.0,0.0,0.0,0.0,0.0,0.0
