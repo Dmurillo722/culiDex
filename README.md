@@ -6,9 +6,9 @@
 
 2. Activate/create python virtual environment
 
-3. Install maturin
+3. Install dependencies
 ```bash
-   pip install maturin
+   pip install customtkinter maturin
 ```
 
 4. Initialize maturin — select **pyo3** when prompted
