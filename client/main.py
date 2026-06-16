@@ -4,6 +4,8 @@ import customtkinter as ctk
 from pathlib import Path
 
 import culidex
+import db
+
 
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("green")
@@ -66,9 +68,11 @@ class Application(ctk.CTk):
         self.search_entry.bind("<Return>", self._search)
         ctk.CTkButton(search_frame, text="Search", width=100, command=self._search, font=("Arial", 12, "bold"), fg_color="#3A9E6F", text_color="white").pack(side=tk.LEFT)
     def _search(self):
-        #ingredient = self.search_entry.get().strip()
-        result = culidex.test_search()
-        print(result)
+        ingredient = self.search_entry.get().strip()
+        #result = culidex.test_search()
+        ingredient_find = db.search(ingredient)
+
+        print(ingredient_find)
         # if not ingredient:
         #     return
 
