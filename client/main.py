@@ -102,7 +102,7 @@ class Application(ctk.CTk):
         self.left_panel.pack_propagate(False)
         #right panel for substitutes
         self.right_panel = ctk.CTkScrollableFrame(split_frame, fg_color="#fdfbee")
-        self.right_panel.pack(side="left", fill="both", expand=True)
+        self.right_panel.pack(side="right", fill="both", expand=True)
 
     def show_results(self, name):
         #clear previous results
@@ -147,40 +147,40 @@ class Application(ctk.CTk):
             ("Vitamin C", f"{row.get('vitamin_c_mg', 'N/A')} mg"),
             ("Zinc",      f"{row.get('zinc_mg', 'N/A')} mg")
         ]
-        ctk.CTkLabel(parent, text=row["name"], font=("Arial", 13, "bold"), text_color="#3E81BC", wraplength=220).pack(padx = 16, pady=(16, 8))
+        ctk.CTkLabel(parent, text=row["name"], font=("Arial", 24, "bold"), text_color="#3E81BC", wraplength=220).pack(padx = 16, pady=(16, 8))
 
         for label, value in key_nutrients:
-            row_frame = ctk.CTkFrame(parent, fg_color="#fdfbee")
-            row_frame.pack(fill="x", padx=16, pady=2)
-            ctk.CTkLabel(row_frame, text=label, font=("Arial", 12), text_color="#3E81BC", anchor="w").pack(side="left")
-            ctk.CTkLabel(row_frame, text=value, font=("Arial", 11, "bold"), text_color="#3E81BC", anchor="e").pack(side="right")
+            row_frame = ctk.CTkFrame(parent, fg_color="#f0f0e8", height=24)
+            row_frame.pack(fill="x", padx=16, pady=0)
+            ctk.CTkLabel(row_frame, text=label, font=("Arial", 22), text_color="#3E81BC", anchor="w").pack(side="left")
+            ctk.CTkLabel(row_frame, text=value, font=("Arial", 18, "bold"), text_color="#3E81BC", anchor="e").pack(side="right")
         
-        extra_frame = ctk.CTkFrame(parent, fg_color="#fdfbee")
+        extra_frame = ctk.CTkFrame(parent, fg_color="#f0f0e8")
         def toggle_extra():
             if extra_frame.winfo_ismapped():
                 extra_frame.pack_forget()
-                toggle_btn.configure(text="+ More")
+                more_btn.configure(text="+ More")
             else:
-                extra_frame.pack(fill="x", padx=16, pady=(4, 0))
-                toggle_btn.configure(text="- Less")
+                extra_frame.pack(fill="x", padx=16, pady=(4, 0), before=more_btn)
+                more_btn.configure(text="- Less")
         for label, value in extra_nutrients:
-            row_frame = ctk.CTkFrame(extra_frame, fg_color="transparent")
-            row_frame.pack(fill="x", pady=2)
-            ctk.CTkLabel(row_frame, text=label, font=("Arial", 12), text_color="#3E81BC", anchor="w").pack(side="left")
-            ctk.CTkLabel(row_frame, text=value, font=("Arial", 11, "bold"), text_color="#3E81BC", anchor="e").pack(side="right")
+            row_frame = ctk.CTkFrame(extra_frame, fg_color="transparent", height=24)
+            row_frame.pack(fill="x", pady=0)
+            ctk.CTkLabel(row_frame, text=label, font=("Arial", 22), text_color="#3E81BC", anchor="w").pack(side="left", pady = 0)
+            ctk.CTkLabel(row_frame, text=value, font=("Arial", 18, "bold"), text_color="#3E81BC", anchor="e").pack(side="right", pady = 0)
 
-        toggle_btn = ctk.CTkButton(parent, text="+ More", command=toggle_extra, font=("Arial", 12), fg_color="transparent", text_color="#3A9E6F"
+        more_btn = ctk.CTkButton(parent, text="+ More", command=toggle_extra, font=("Arial", 14), fg_color="transparent", text_color="#3A9E6F"
                                       , hover_color="#e8e8e0")
-        toggle_btn.pack(padx = 16,pady=(4, 16))
+        more_btn.pack(padx = 16,pady=(4, 16))
 
     def build_substitute_card(self, parent, item):
         top = ctk.CTkFrame(parent, fg_color="transparent")
         top.pack(fill="x",padx=16, pady=(12, 4))
         
-        ctk.CTkLabel(top, text=item["name"], font=("Arial", 13, "bold"), text_color="#3E81BC",).pack(side="left")
+        ctk.CTkLabel(top, text=item["name"], font=("Arial", 24, "bold"), text_color="#3E81BC",).pack(side="left")
 
         score_color = "#3A9E6F" if item["score"] >= 75 else "#E8A020" if item["score"] >= 50 else "#CC4444"
-        ctk.CTkLabel(top, text=f"{item['score']}% match", font=("Arial", 12, "bold"), text_color=score_color).pack(side="right")
+        ctk.CTkLabel(top, text=f"{item['score']}% match", font=("Arial", 20, "bold"), text_color=score_color).pack(side="right")
         #nothing for now
         key_nutrients = [
             ("Calories", "-- kcal"),
@@ -193,17 +193,17 @@ class Application(ctk.CTk):
         nutrients_frame = ctk.CTkFrame(parent, fg_color="transparent")
         nutrients_frame.pack(fill="x", padx=16, pady=(0, 4))
         for label, value in key_nutrients:
-            row_frame = ctk.CTkFrame(nutrients_frame, fg_color="transparent")
-            row_frame.pack(fill="x", pady=1)
-            ctk.CTkLabel(row_frame, text=label, font=("Arial", 12), text_color="#3E81BC", anchor="w").pack(side="left")
-            ctk.CTkLabel(row_frame, text=value, font=("Arial", 11, "bold"), text_color="#3E81BC", anchor="e").pack(side="right")
+            row_frame = ctk.CTkFrame(nutrients_frame, fg_color="transparent", height=24)
+            row_frame.pack(fill="x", pady=0)
+            ctk.CTkLabel(row_frame, text=label, font=("Arial", 20), text_color="#3E81BC", anchor="w").pack(side="left", pady=0)
+            ctk.CTkLabel(row_frame, text=value, font=("Arial", 16, "bold"), text_color="#3E81BC", anchor="e").pack(side="right", pady=0)
 
         def toggle_extra():
             if extra_frame.winfo_ismapped():
                 extra_frame.pack_forget()
                 more_btn.configure(text="+ More")
             else:
-                extra_frame.pack(fill="x", padx=16, pady=(0, 4))
+                extra_frame.pack(fill="x", padx=16, pady=(0, 4), before=more_btn)
                 more_btn.configure(text="− Less")
         #nothing for now
         extra_nutrients = [
@@ -212,11 +212,11 @@ class Application(ctk.CTk):
             ("Vitamin C", "-- mg"),
         ]
         for label, value in extra_nutrients:
-            row_frame = ctk.CTkFrame(extra_frame, fg_color="transparent")
-            row_frame.pack(fill="x", pady=1)
-            ctk.CTkLabel(row_frame, text=label, font=("Arial", 10), text_color="#3E81BC", anchor="w").pack(side="left")
-            ctk.CTkLabel(row_frame, text=value, font=("Arial", 10, "bold"), text_color="#3E81BC", anchor="e").pack(side="right")
-        more_btn = ctk.CTkButton(parent, text="+ More", command=toggle_extra, font=("Arial", 12), fg_color="transparent", text_color="#3A9E6F"
+            row_frame = ctk.CTkFrame(extra_frame, fg_color="transparent", height = 24)
+            row_frame.pack(fill="x", pady=0)
+            ctk.CTkLabel(row_frame, text=label, font=("Arial", 20), text_color="#3E81BC", anchor="w").pack(side="left", pady=0)
+            ctk.CTkLabel(row_frame, text=value, font=("Arial", 16, "bold"), text_color="#3E81BC", anchor="e").pack(side="right", pady=0)
+        more_btn = ctk.CTkButton(parent, text="+ More", command=toggle_extra, font=("Arial", 14), fg_color="transparent", text_color="#3A9E6F"
                                       , hover_color="#e8e8e0")
         more_btn.pack(padx = 16,pady=(0, 12))
     def _search(self):
