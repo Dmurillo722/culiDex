@@ -60,7 +60,7 @@ class Application(ctk.CTk):
         self.search_page.place(x=0, y= 40, relwidth=1, relheight=1)
         self.configure(fg_color="#fdfbee")
         
-        ctk.CTkLabel(self.search_page, text="CuliDex", font=("Arial", 38, "bold"), text_color="#3E81BC").pack(pady=20)
+        ctk.CTkLabel(self.search_page, text="CuliDex", font=("Arial", 38, "bold"), text_color="#3E81BC").pack(pady=(80, 0))
         
         logo_path = Path(__file__).parent / "assets" / "logo.png"
         logo_img = tk.PhotoImage(file=str(logo_path))
@@ -69,15 +69,15 @@ class Application(ctk.CTk):
         logo_label.pack(pady=(8, 16))
         
         self.region_label = ctk.CTkLabel(self.search_page, text=f"Current Region: {self.region_var}", font=("Arial", 20), text_color="#3E81BC")
-        self.region_label.pack(pady=10)
+        self.region_label.pack()
 
         search_frame = ctk.CTkFrame(self.search_page, fg_color="#fdfbee", corner_radius=0)
         search_frame.pack(pady=20)
-        self.search_entry = ctk.CTkEntry(search_frame, width=300, font=("Arial", 12), placeholder_text="Enter an ingredient...")
+        self.search_entry = ctk.CTkEntry(search_frame, width=300, height=30, font=("Arial", 14), placeholder_text="Enter an ingredient...")
         self.search_entry.pack(side=tk.LEFT, padx=10)
         self.search_entry.bind("<Return>", lambda e: self._search())
         self.search_entry.bind("<Key>", lambda e: self.search_error_label.configure(text=""))
-        ctk.CTkButton(search_frame, text="Search", width=100, command=self._search, font=("Arial", 12, "bold"), 
+        ctk.CTkButton(search_frame, text="Search", width=100, height=30, command=self._search, font=("Arial", 12, "bold"), 
                       fg_color="#3A9E6F", text_color="white").pack(side=tk.LEFT)
         self.search_error_label = ctk.CTkLabel(self.search_page, text="", font=("Arial", 12), text_color="red")
         self.search_error_label.pack()
@@ -111,7 +111,7 @@ class Application(ctk.CTk):
         for widget in self.right_panel.winfo_children():
             widget.destroy()
         
-        self.results_title.configure(text = f"Substitutes for: {name}")
+        self.results_title.configure(text = f"Substitutes for: {name}", font=("Arial", 30, "bold"))
         #retrieve ingredient information from db
         match = db.search(name)
         if not match.empty:
