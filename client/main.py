@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 from pathlib import Path
+import similarity
 
 import culidex
 import db
@@ -20,6 +21,12 @@ class Application(ctk.CTk):
         self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
         self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
         self.create_widgets()
+        #fetch once and reuse for both matrix and food names
+        _df = db.fetch_all()
+        #build numpy matrix on initialization for faster querying and rust bindings
+        self.matrix = similarity._build_normalized_matrix(_df, similarity.WEIGHTS)
+        #initialize food names numpy array for index accessing
+        self.food_names = similarity._build_food_names(_df)
 
     def create_widgets(self):
         self.build_menu()
@@ -119,16 +126,26 @@ class Application(ctk.CTk):
             self.build_ingredient_card(self.left_panel, row, is_selected = True)
         
         #dummy substitute ingredient information
-        dummy_results = [
-            {"name": "Horseradish root", "score": 89},
-            {"name": "Ginger root",      "score": 68},
-            {"name": "Mustard seed",     "score": 49},
-        ]
-        for item in dummy_results:
+        #dummy_results = [
+        #    {"name": "Horseradish root", "score": 89},
+        #    {"name": "Ginger root",      "score": 68},
+        #    {"name": "Mustard seed",     "score": 49},
+        #]
+
+        results = similarity.get_substitutes(name, self.food_names, self.matrix, 10)
+
+        for item in results:
             card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
-            card.pack(fill = "x", pady = 6)
-            self.build_substitute_card(card, item)
+            card.pack(fill = 'x', pady =6)
+            self.build_substitute_card_numerical(card, item)
         self.show_page(self.results_page)
+
+
+        #for item in results: #formerly dummy results
+        #    card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
+        #    card.pack(fill = "x", pady = 6)
+        #    self.build_substitute_card(card, item)
+        #self.show_page(self.results_page)
 
     def build_ingredient_card(self, parent, row, is_selected = False):
         key_nutrients = [
@@ -173,6 +190,42 @@ class Application(ctk.CTk):
                                       , hover_color="#e8e8e0")
         more_btn.pack(padx = 16,pady=(4, 16))
 
+
+    def build_substitute_card_numerical(self, parent, item):
+        top = ctk.CTkFrame(parent, fg_color="transparent")
+        top.pack(fill="x",padx=16, pady=(12, 4))
+
+        ctk.CTkLabel(top, text=self.
+                    food_names[item[0]], font=("Arial", 24, "bold"), text_color="#3E81BC",).pack(side="left")
+
+        score = round(item[1] * 100)
+        score_color = "#3A9E6F" if score >= 75 else "#E8A020" if score >= 50 else "#CC4444"
+        ctk.CTkLabel(top, text=f"{score}% match", font=("Arial", 20, "bold"), text_color=score_color).pack(side="right")
+        #nothing for now
+
+        food_data = db.search(self.food_names[item[0]])
+        calories = food_data.iloc[0]["energy_kcal"]
+        protein = food_data.iloc[0]["protein_g"]
+        fat = food_data.iloc[0]["fat_total_g"]
+        carbs = food_data.iloc[0]["carb_g"]
+
+        key_nutrients = [
+            ("Calories", f"{calories} kcal"),
+            ("Protein",  f"{protein} g"),
+            ("Carbs",    f"{carbs} g"),
+            ("Fat",      f"{fat} g"),
+        ]
+        extra_frame = ctk.CTkFrame(parent, fg_color="transparent")
+
+        nutrients_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        nutrients_frame.pack(fill="x", padx=16, pady=(0, 4))
+        for label, value in key_nutrients:
+            row_frame = ctk.CTkFrame(nutrients_frame, fg_color="transparent", height=24)
+            row_frame.pack(fill="x", pady=0)
+            ctk.CTkLabel(row_frame, text=label, font=("Arial", 20), text_color="#3E81BC", anchor="w").pack(side="left", pady=0)
+            ctk.CTkLabel(row_frame, text=value, font=("Arial", 16, "bold"), text_color="#3E81BC", anchor="e").pack(side="right", pady=0)
+
+
     def build_substitute_card(self, parent, item):
         top = ctk.CTkFrame(parent, fg_color="transparent")
         top.pack(fill="x",padx=16, pady=(12, 4))
@@ -183,7 +236,7 @@ class Application(ctk.CTk):
         ctk.CTkLabel(top, text=f"{item['score']}% match", font=("Arial", 20, "bold"), text_color=score_color).pack(side="right")
         #nothing for now
         key_nutrients = [
-            ("Calories", "-- kcal"),
+            ("Calories", "-- kcal"),#
             ("Protein",  "-- g"),
             ("Carbs",    "-- g"),
             ("Fat",      "-- g"),
