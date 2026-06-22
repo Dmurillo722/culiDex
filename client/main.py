@@ -25,7 +25,7 @@ class Application(ctk.CTk):
         #fetch once and reuse for both matrix and food names
         _df = db.fetch_all()
         #build numpy matrix on initialization for faster querying and rust bindings
-        self.matrix = similarity._build_normalized_matrix(_df, similarity.WEIGHTS)
+        self.matrix = similarity._build_matrix(_df, similarity.WEIGHTS)
         #initialize food names numpy array for index accessing
         self.food_names = similarity._build_food_names(_df)
 
@@ -147,7 +147,7 @@ class Application(ctk.CTk):
         #    {"name": "Mustard seed",     "score": 49},
         #]
 
-        results = similarity.get_substitutes(name, self.food_names, self.matrix, 10)
+        results = similarity.get_substitutes(name, self.food_names, self.matrix, 30)
 
         for item in results:
             card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
@@ -215,7 +215,7 @@ class Application(ctk.CTk):
         ctk.CTkLabel(top, text=self.
                     food_names[item[0]], font=("Arial", 24, "bold"), text_color="#3E81BC",).pack(side="left")
 
-        score = round(item[1] * 100)
+        score = round(item[1]*100)
         score_color = "#3A9E6F" if score >= 75 else "#E8A020" if score >= 50 else "#CC4444"
         ctk.CTkLabel(top, text=f"{score}% match", font=("Arial", 20, "bold"), text_color=score_color).pack(side="right")
         #nothing for now
@@ -225,12 +225,16 @@ class Application(ctk.CTk):
         protein = food_data.iloc[0]["protein_g"]
         fat = food_data.iloc[0]["fat_total_g"]
         carbs = food_data.iloc[0]["carb_g"]
+        sodium = food_data.iloc[0]["sodium_mg"]
+        sugars = food_data.iloc[0]["sugars_total_g"]
 
         key_nutrients = [
             ("Calories", f"{calories} kcal"),
             ("Protein",  f"{protein} g"),
             ("Carbs",    f"{carbs} g"),
             ("Fat",      f"{fat} g"),
+            ("Sodium",   f"{sodium} mg"),
+            ("Total Sugars", f"{sugars} g")
         ]
         extra_frame = ctk.CTkFrame(parent, fg_color="transparent")
 
