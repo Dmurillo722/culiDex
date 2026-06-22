@@ -225,6 +225,32 @@ class Application(ctk.CTk):
             ctk.CTkLabel(row_frame, text=label, font=("Arial", 20), text_color="#3E81BC", anchor="w").pack(side="left", pady=0)
             ctk.CTkLabel(row_frame, text=value, font=("Arial", 16, "bold"), text_color="#3E81BC", anchor="e").pack(side="right", pady=0)
 
+        extra_nutrients = [
+            ("Potassium", f"{food_data.iloc[0]['potassium_mg']} mg"),
+            ("Calcium",   f"{food_data.iloc[0]['calcium_mg']} mg"),
+            ("Iron",      f"{food_data.iloc[0]['iron_mg']} mg"),
+            ("Vitamin C", f"{food_data.iloc[0]['vitamin_c_mg']} mg"),
+            ("Sugars",    f"{food_data.iloc[0]['sugars_total_g']} g"),
+        ]
+
+        for label, value in extra_nutrients:
+            row_frame = ctk.CTkFrame(extra_frame, fg_color="transparent", height=24)
+            row_frame.pack(fill="x", pady=0)
+            ctk.CTkLabel(row_frame, text=label, font=("Arial", 20), text_color="#3E81BC", anchor="w").pack(side="left")
+            ctk.CTkLabel(row_frame, text=value, font=("Arial", 16, "bold"), text_color="#3E81BC", anchor="e").pack(side="right")
+
+        def toggle_extra():
+            if extra_frame.winfo_ismapped():
+                extra_frame.pack_forget()
+                more_btn.configure(text="+ More")
+            else:
+                extra_frame.pack(fill="x", padx=16, pady=(0, 4), before=more_btn)
+                more_btn.configure(text="− Less")
+        more_btn = ctk.CTkButton(parent, text="+ More", command=toggle_extra,
+                          font=("Arial", 14), fg_color="transparent",
+                          text_color="#3A9E6F", hover_color="#e8e8e0")
+        more_btn.pack(padx=16, pady=(0, 12))
+
 
     def build_substitute_card(self, parent, item):
         top = ctk.CTkFrame(parent, fg_color="transparent")
