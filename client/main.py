@@ -3,6 +3,7 @@ from tkinter import ttk
 import customtkinter as ctk
 from pathlib import Path
 import similarity
+import sys
 
 import culidex
 import db
@@ -33,7 +34,20 @@ class Application(ctk.CTk):
         self.build_search_page()
         self.display_results_page()
         self.show_page(self.search_page)
-    
+        
+    def _bind_scroll_recursive(self, widget, canvas):
+        widget.bind("<MouseWheel>", lambda e: self._on_mousewheel(e, canvas))
+        widget.bind("<Button-4>", lambda e: canvas.yview_scroll(-1, "units"))
+        widget.bind("<Button-5>", lambda e: canvas.yview_scroll(1, "units"))
+        for child in widget.winfo_children():
+            self._bind_scroll_recursive(child, canvas)
+
+    def _on_mousewheel(self, event, canvas):
+        if sys.platform.startswith("win"):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        elif sys.platform == "darwin":
+            canvas.yview_scroll(int(-1 * event.delta), "units")
+
     def show_page(self, page):
         page.tkraise()
 
@@ -125,6 +139,7 @@ class Application(ctk.CTk):
             row = match.iloc[0]
             self.build_ingredient_card(self.left_panel, row, is_selected = True)
         
+        
         #dummy substitute ingredient information
         #dummy_results = [
         #    {"name": "Horseradish root", "score": 89},
@@ -138,6 +153,8 @@ class Application(ctk.CTk):
             card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
             card.pack(fill = 'x', pady =6)
             self.build_substitute_card_numerical(card, item)
+
+        self._bind_scroll_recursive(self.right_panel, self.right_panel._parent_canvas)
         self.show_page(self.results_page)
 
 
