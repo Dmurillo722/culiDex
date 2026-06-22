@@ -28,7 +28,7 @@ not be locally available when outside of their home country.
 maturin develop
 ```
 
-6. Run 'load_csv_to_db()' function in db.py to setup to build the database
+6. Run db.py directly to build the database
 
 ---
 

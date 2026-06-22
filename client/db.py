@@ -44,5 +44,7 @@ def search(query: str) -> pd.DataFrame:
     conn.close()
     return df
 
-# only needs to be ran once
-#load_csv_to_db()
+# only needs to be ran once, when building the database
+if __name__ == "__main__":
+    print("Building database..")
+    load_csv_to_db()
