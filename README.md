@@ -1,3 +1,9 @@
+## Description
+```bash
+An ingredient substitution engine aimed at helping users find substitutes that may
+not be locally available when outside of their home country.
+```
+---
 ## Setup
 
 ### First-Time Setup
@@ -31,4 +37,9 @@ After modifying Rust code, rerun this command:
 
 ```bash
 maturin develop
+```
+
+## Repository
+``` bash
+https://github.com/Dmurillo722/culiDex
 ```
