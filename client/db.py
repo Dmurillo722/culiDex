@@ -2,7 +2,8 @@ import sqlite3
 import pandas as pd
 
 
-CSV_PATH = './data/japan_foods.csv'
+CSV_PATH_JAPAN = './data/japan_foods.csv'
+CSV_PATH_STARTING = './data/starting_database.csv'
 DB_PATH = './data/data.db'
 
 
@@ -10,7 +11,12 @@ DB_PATH = './data/data.db'
 
 # turns csv file into db file
 def load_csv_to_db():
-    df = pd.read_csv(CSV_PATH)
+    df_japan = pd.read_csv(CSV_PATH_JAPAN)
+    df_starting = pd.read_csv(CSV_PATH_STARTING)
+
+    df = pd.concat([df_japan, df_starting], ignore_index=True)
+    df = df.drop_duplicates()
+
     conn = sqlite3.connect(DB_PATH)
     df.to_sql("foods", conn, if_exists="replace", index=False)
     conn.close()
@@ -39,4 +45,4 @@ def search(query: str) -> pd.DataFrame:
     return df
 
 # only needs to be ran once
-#load_csv_to_db();
+#load_csv_to_db()
