@@ -5,7 +5,7 @@ import culidex
 
 WEIGHTS = np.array([
     #0.00,  # category        — categorical, excluded
-    0.25,  # energy_kcal     — redundant with macro sum
+    0.01,  # energy_kcal     — redundant with macro sum
     1.00,  # water_g         — concentration/intensity multiplier
     3.00,  # protein_g       — umami potential, Maillard character
     3.00,  # fat_total_g     — richness, mouthfeel
@@ -29,9 +29,9 @@ WEIGHTS = np.array([
     0.50,  # phosphorus_mg   — structural, weak flavor signal
     3.00,  # vitamin_c_mg    — sourness/acidity proxy
     1.00,  # niacin_mg       — umami precursor
-    0.50,  # thiamin_mg      — negligible direct flavor
-    0.50,  # riboflavin_mg   — negligible direct flavor
-    0.50,  # vitamin_b6_mg   — negligible direct flavor
+    0.01,  # thiamin_mg      — negligible direct flavor
+    0.01,  # riboflavin_mg   — negligible direct flavor
+    0.01,  # vitamin_b6_mg   — negligible direct flavor
 ])
 
 def _build_normalized_matrix(df : pd.DataFrame, weights : np.array):
@@ -45,13 +45,34 @@ def _build_normalized_matrix(df : pd.DataFrame, weights : np.array):
     df : a pandas dataframe
     """
     numerical_df = df.drop(columns = ['name', 'category', 'country'])
-    numerical_df = numerical_df.fillna(0)
+    numerical_df = numerical_df.fillna(numerical_df.mean())
     numerical_matrix = numerical_df[:].values
     numerical_matrix = numerical_matrix*weights
     row_norms = np.linalg.norm(numerical_matrix, axis = 1, keepdims=True)
     numerical_matrix = numerical_matrix/row_norms
 
     return numerical_matrix
+
+
+def _build_matrix(df : pd.DataFrame, weights : np.array):
+    """
+    Function used to build a normalized matrix from the data for faster computation time
+
+    Retruns a matrix of  weighted data points for cosine similarity computation
+    The non numerical columns are dropped and all NaN values are filled with 0s
+    This function is for the purpose of trying updated logic for the rust cosine
+    similarity in which the zero value entries are dropped entirely for comparison
+    Params :
+
+    df : a pandas dataframe
+    """
+    numerical_df = df.drop(columns = ['name', 'category', 'country'])
+    numerical_df = numerical_df.fillna(0)
+    numerical_matrix = numerical_df[:].values
+    numerical_matrix = numerical_matrix*weights
+
+    return numerical_matrix
+
 
 
 #this function will be useful later on when implementing only within same category search

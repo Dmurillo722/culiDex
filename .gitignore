@@ -6,4 +6,4 @@ data/
 Cargo.lock
 /target
 .github
-client/__pycache__/
+/client/__pycache__/
