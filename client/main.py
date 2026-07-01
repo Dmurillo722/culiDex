@@ -119,25 +119,68 @@ class Application(ctk.CTk):
         scroll = ctk.CTkScrollableFrame(self.disambiguation_page, fg_color="#fdfbee")
         scroll.pack(fill="both", expand=True, padx=40, pady=(0, 20))
 
-        buttons = {}
-        for match in matches:
-            btn = ctk.CTkButton(scroll, text=match, command=lambda m=match: self.show_results(m),
+        # buttons = {}
+        # for match in matches:
+        #     btn = ctk.CTkButton(scroll, text=match, command=lambda m=match: self.show_results(m),
+        #                         font=("Arial", 30, "bold"), fg_color="#f0f0e8", text_color="#3E81BC",
+        #                         hover_color="#d8d8cc", anchor="w")
+        #     btn.pack(fill="x", pady=4)
+        #     buttons[match] = btn
+
+
+        # replaced with pagination for more efficient search results
+
+        full_matches_list = matches
+        results_size = 10
+        state = {"loaded": 0}
+        cache = {} # buttons only constructed once for same ingredient to save performance
+
+        def build_button(match):
+            button = cache.get(match)
+            if button is None:
+                button = ctk.CTkButton(scroll, text=match, command=lambda m=match: self.show_results(m),
                                 font=("Arial", 30, "bold"), fg_color="#f0f0e8", text_color="#3E81BC",
                                 hover_color="#d8d8cc", anchor="w")
-            btn.pack(fill="x", pady=4)
-            buttons[match] = btn
+                cache[match] = button
+            return button
 
-        def filter_matches(event=None):
+        load_more_btn = ctk.CTkButton(scroll, text="See more results...", command=lambda: load_next_batch(),
+            font=("Arial", 16, "bold"), fg_color="#e0e0d0", text_color="#3E81BC",
+            hover_color="#cfcfc0")
+
+        def get_filtered(): # if user enters text for filtering
             query = filter_entry.get().strip().lower()
-            for match, btn in buttons.items():
-                if query in match.lower():
-                    btn.pack(fill="x", pady=4)
-                else:
-                    btn.pack_forget()
+            if query:
+                return query, [m for m in full_matches_list if query in m.lower()]
+            return query, full_matches_list
 
-        filter_entry.bind("<Key>", lambda e: self.after(10, filter_matches))
+        def render():
+            query, filtered = get_filtered()
+            if state.get("last_query") != query:
+                state["last_query"] = query
+                state["loaded"] = 0
 
-        
+            for btn in cache.values():
+                btn.pack_forget()
+            load_more_btn.pack_forget()
+
+            if state["loaded"] == 0:
+                state["loaded"] = min(results_size, len(filtered))
+
+            for match in filtered[:state["loaded"]]:
+                build_button(match).pack(fill="x", pady=4)
+
+            if state["loaded"] < len(filtered):
+                load_more_btn.pack(fill="x", pady=8)
+
+        def load_next_batch():
+            _, filtered = get_filtered()
+            state["loaded"] = min(state["loaded"] + results_size, len(filtered))
+            render()
+
+        filter_entry.bind("<Key>", lambda e: self.after(10, render))
+        render()
+
     def display_results_page(self):
         self.results_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
         self.results_page.place(x=0, y=40,relwidth=1, relheight=1)
