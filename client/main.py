@@ -19,7 +19,7 @@ class Application(ctk.CTk):
         self.attributes("-fullscreen", True)
         self.resizable(True, True)
         self.region_var = "United States"
-        self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
+        self.bind_all("<Button-1>", lambda event: event.widget.focus_set() if hasattr(event.widget, 'focus_set') else None)
         self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
         self.create_widgets()
         #fetch once and reuse for both matrix and food names
@@ -35,18 +35,27 @@ class Application(ctk.CTk):
         self.display_results_page()
         self.show_page(self.search_page)
         
-    def _bind_scroll_recursive(self, widget, canvas):
-        widget.bind("<MouseWheel>", lambda e: self._on_mousewheel(e, canvas))
-        widget.bind("<Button-4>", lambda e: canvas.yview_scroll(-1, "units"))
-        widget.bind("<Button-5>", lambda e: canvas.yview_scroll(1, "units"))
-        for child in widget.winfo_children():
-            self._bind_scroll_recursive(child, canvas)
-
-    def _on_mousewheel(self, event, canvas):
+    def _bind_scroll(self, scrollable_frame):
+        canvas = scrollable_frame._parent_canvas
         if sys.platform.startswith("win"):
-            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            scrollable_frame.bind_all("<MouseWheel>",
+                lambda e: canvas.yview_scroll(int(-1 * (e.delta / 120)) * 6, "units"))
         elif sys.platform == "darwin":
-            canvas.yview_scroll(int(-1 * event.delta), "units")
+            scrollable_frame.bind_all("<MouseWheel>",
+                lambda e: canvas.yview_scroll(int(-1 * e.delta), "units"))
+        else:
+            scrollable_frame.bind_all("<Button-4>",
+                lambda e: canvas.yview_scroll(-1, "units"))
+            scrollable_frame.bind_all("<Button-5>",
+                lambda e: canvas.yview_scroll(1, "units"))
+
+    def _unbind_scroll(self, scrollable_frame):
+        if sys.platform.startswith("win") or sys.platform == "darwin":
+            scrollable_frame.unbind_all("<MouseWheel>")
+        else:
+            scrollable_frame.unbind_all("<Button-4>")
+            scrollable_frame.unbind_all("<Button-5>")
+        
 
     def show_page(self, page):
         page.tkraise()
@@ -136,6 +145,8 @@ class Application(ctk.CTk):
                     btn.pack_forget()
 
         filter_entry.bind("<Key>", lambda e: self.after(10, filter_matches))
+        self._bind_scroll(scroll)
+
 
         
     def display_results_page(self):
@@ -190,7 +201,7 @@ class Application(ctk.CTk):
             card.pack(fill = 'x', pady =6)
             self.build_substitute_card_numerical(card, item)
 
-        self._bind_scroll_recursive(self.right_panel, self.right_panel._parent_canvas)
+        self._bind_scroll(self.right_panel)
         self.show_page(self.results_page)
 
 
