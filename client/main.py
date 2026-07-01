@@ -102,6 +102,42 @@ class Application(ctk.CTk):
                       fg_color="#3A9E6F", text_color="white").pack(side=tk.LEFT)
         self.search_error_label = ctk.CTkLabel(self.search_page, text="", font=("Arial", 12), text_color="red")
         self.search_error_label.pack()
+    
+    def build_disambiguation_page(self, matches):
+        if hasattr(self, 'disambiguation_page'):
+            self.disambiguation_page.destroy()
+        self.disambiguation_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
+        self.disambiguation_page.place(x=0, y=40, relwidth=1, relheight=1)
+        ctk.CTkButton(self.disambiguation_page, text="← Back",
+                   command=lambda: self.show_page(self.search_page),
+                   fg_color="#3A9E6F", hover_color="#2E7D57", width=80).pack(anchor="w", padx=40, pady=20)
+        ctk.CTkLabel(self.disambiguation_page, text="Multiple matches found. Please select one:", font=("Arial", 32, "bold"), text_color="#3E81BC").pack(anchor="w", padx=40)
+        filter_entry = ctk.CTkEntry(self.disambiguation_page, width=300, font=("Arial", 13),
+                                 placeholder_text="Filter results...")
+        filter_entry.pack(anchor="w", padx=40, pady=(0, 10))
+
+        scroll = ctk.CTkScrollableFrame(self.disambiguation_page, fg_color="#fdfbee")
+        scroll.pack(fill="both", expand=True, padx=40, pady=(0, 20))
+
+        buttons = {}
+        for match in matches:
+            btn = ctk.CTkButton(scroll, text=match, command=lambda m=match: self.show_results(m),
+                                font=("Arial", 30, "bold"), fg_color="#f0f0e8", text_color="#3E81BC",
+                                hover_color="#d8d8cc", anchor="w")
+            btn.pack(fill="x", pady=4)
+            buttons[match] = btn
+
+        def filter_matches(event=None):
+            query = filter_entry.get().strip().lower()
+            for match, btn in buttons.items():
+                if query in match.lower():
+                    btn.pack(fill="x", pady=4)
+                else:
+                    btn.pack_forget()
+
+        filter_entry.bind("<Key>", lambda e: self.after(10, filter_matches))
+
+        
     def display_results_page(self):
         self.results_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
         self.results_page.place(x=0, y=40,relwidth=1, relheight=1)
@@ -326,10 +362,15 @@ class Application(ctk.CTk):
         if ingredient_find.empty:
             self.search_error_label.configure(text="No matches found. Try a different term.")
             return
-        selected = ingredient_find.iloc[0]["name"]
-        self.show_results(selected)
         # if not ingredient:
         #     return
+        if len(ingredient_find) == 1:
+            self.show_results(ingredient_find.iloc[0]["name"])
+        else:
+            matches = ingredient_find["name"].tolist()
+            self.build_disambiguation_page(matches)
+            self.show_page(self.disambiguation_page)
+
 
 app = Application()
 app.mainloop()
