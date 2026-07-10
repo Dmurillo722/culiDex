@@ -28,6 +28,10 @@ class Application(ctk.CTk):
         self.matrix = similarity._build_matrix(_df, similarity.WEIGHTS)
         #initialize food names numpy array for index accessing
         self.food_names = similarity._build_food_names(_df)
+        self.cat_map = similarity._build_category_mapping(_df)
+        #tracks which categories the user currently wants included in similarity search
+        #kept in sync with the checkboxes in the category selector panel
+        self.selected_categories = set(self.cat_map.keys())
 
     def create_widgets(self):
         self.build_menu()
@@ -75,15 +79,90 @@ class Application(ctk.CTk):
         settings_menu.add_separator()
         settings_button.config(menu=settings_menu)
 
+        ctk.CTkButton(menubar, text="Categories", command=self.open_category_selector,
+                fg_color="#3A9E6F", hover_color="#2E7D57", font=("Arial", 12, "bold"),
+                width=90, height=28, corner_radius=4).pack(side=tk.LEFT, padx=10, pady=6)
+
         ctk.CTkButton(menubar, text="✕", command=self.destroy, font=("Arial", 12, "bold"), fg_color="#3A9E6F",
                hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side=tk.RIGHT, padx=4, pady = 6)
-        ctk.CTkButton(menubar, text="⛶", command=lambda: self.attributes("-fullscreen", not self.attributes("-fullscreen")), 
+        ctk.CTkButton(menubar, text="⛶", command=lambda: self.attributes("-fullscreen", not self.attributes("-fullscreen")),
                 fg_color="#3A9E6F", hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side="right", pady=6)
-    
+
     def set_region(self, region):
         print(f"Region set to: {region}")
         self.region_var = region
         self.region_label.configure(text=f"Current Region: {self.region_var}")
+
+    def open_category_selector(self):
+        """
+        Opens a popup panel with a checkbox per food category (from self.cat_map).
+        Toggling a checkbox keeps self.selected_categories (a set of category name
+        strings) in sync. That set + self.cat_map is what the index array builder
+        will read from to know which indices to concatenate for the rust search.
+        """
+        if hasattr(self, "category_selector_window") and self.category_selector_window.winfo_exists():
+            self.category_selector_window.lift()
+            self.category_selector_window.focus_force()
+            return
+
+        win = ctk.CTkToplevel(self)
+        win.title("Select Categories")
+        win.geometry("340x520")
+        win.transient(self)
+        win.attributes("-topmost", True)
+        self.category_selector_window = win
+
+        ctk.CTkLabel(win, text="Categories", font=("Arial", 20, "bold"),
+                     text_color="#3E81BC").pack(pady=(16, 8))
+
+        button_row = ctk.CTkFrame(win, fg_color="transparent")
+        button_row.pack(fill="x", padx=16, pady=(0, 8))
+
+        def set_all(value):
+            for category, var in category_vars.items():
+                var.set(value)
+                self._on_category_toggle(category, var)
+
+        ctk.CTkButton(button_row, text="Select All", command=lambda: set_all(True),
+                      font=("Arial", 12, "bold"), fg_color="#3A9E6F",
+                      hover_color="#2E7D57", width=100).pack(side="left")
+        ctk.CTkButton(button_row, text="Clear All", command=lambda: set_all(False),
+                      font=("Arial", 12, "bold"), fg_color="#CC4444",
+                      hover_color="#a83a3a", width=100).pack(side="right")
+
+        scroll = ctk.CTkScrollableFrame(win, fg_color="#fdfbee")
+        scroll.pack(fill="both", expand=True, padx=16, pady=(0, 12))
+
+        category_vars = {}
+        for category in sorted(self.cat_map.keys()):
+            var = ctk.BooleanVar(value=category in self.selected_categories)
+            checkbox = ctk.CTkCheckBox(
+                scroll, text=category, variable=var,
+                command=lambda cat=category, var=var: self._on_category_toggle(cat, var),
+                font=("Arial", 14), text_color="#3E81BC",
+                fg_color="#3A9E6F", hover_color="#2E7D57")
+            checkbox.pack(anchor="w", padx=4, pady=4)
+            category_vars[category] = var
+
+        self._bind_scroll(scroll)
+
+        def on_close():
+            self._unbind_scroll(scroll)
+            win.destroy()
+
+        win.protocol("WM_DELETE_WINDOW", on_close)
+        ctk.CTkButton(win, text="Done", command=on_close, font=("Arial", 12, "bold"),
+                      fg_color="#3A9E6F", hover_color="#2E7D57").pack(pady=(0, 16))
+
+    def _on_category_toggle(self, category, var):
+        if var.get():
+            self.selected_categories.add(category)
+        else:
+            self.selected_categories.discard(category)
+
+    def get_selected_categories(self):
+        """Returns a copy of the category names currently checked in the selector."""
+        return set(self.selected_categories)
 
     def build_search_page(self):
         self.search_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
@@ -235,7 +314,8 @@ class Application(ctk.CTk):
         #    {"name": "Mustard seed",     "score": 49},
         #]
 
-        results = similarity.get_substitutes(name, self.food_names, self.matrix, 30)
+        indices = similarity._build_index_list(self.cat_map, self.selected_categories)
+        results = similarity.get_substitutes(name, self.food_names, indices, self.matrix,top_n=30)
 
         for item in results:
             card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)

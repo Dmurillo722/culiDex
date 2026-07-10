@@ -3,6 +3,7 @@ import db
 import pandas as pd
 from scipy.stats import zscore
 import culidex
+import numpy.typing as npt
 
 WEIGHTS = np.array([
     #0.00,  # category        — categorical, excluded
@@ -87,16 +88,27 @@ def _build_category_mapping(df):
 
     return {cat : np.where(df['category'] == cat)[0] for cat in df['category'].unique()}
 
+def _build_index_list(cat_dict : dict[str,npt.NDArray[np.int32]], categories : set[str]):
+    """
+    This function is used to build a concatenated list of useful indices for comparison
+    to pass to the rust similarity calculator
+    """
+    arrays = [cat_dict[cat] for cat in categories]
+    if not arrays: 
+        return np.array([], dtype=np.int64)
+    
+    return np.concatenate(arrays)
+
+
 def _build_food_names(df):
     return df["name"].to_numpy()
 
-def get_substitutes(foodName, food_names, matrix, top_n):
+def get_substitutes(foodName, food_names, indices, matrix, top_n):
 
     query_ind = np.where(foodName == food_names)[0][0]
     query = matrix[query_ind]
-
     #request one extra to drop the food matching itself (always score 1.0)
-    results = culidex.cosine_scores(matrix.tolist(), query.tolist(), top_n + 1)
+    results = culidex.cosine_scores(indices.tolist(), matrix.tolist(), query.tolist(), top_n + 1)
     results = [(i, score) for i, score in results if i != query_ind]
 
     return results[:top_n]
