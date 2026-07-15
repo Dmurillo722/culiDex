@@ -89,11 +89,14 @@ class Application(ctk.CTk):
         fg_color="#3A9E6F", hover_color="#2E7D57", font=("Arial", 18, "bold"),
         width=100, height=28, corner_radius=4).pack(side=tk.LEFT, padx=6, pady=6)
 
-        ctk.CTkButton(menubar, text="✕", command=self.destroy, font=("Arial", 14, "bold"), fg_color="#3A9E6F",
-        hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side=tk.RIGHT, padx=4, pady=6)
-        ctk.CTkButton(menubar, text="⛶", command=lambda: self.attributes("-fullscreen", not self.attributes("-fullscreen")),
-        fg_color="#3A9E6F", hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side="right", pady=6)
+        ctk.CTkButton(menubar, text="Saved", command=self.show_saved_page, font=("Arial", 18, "bold"),
+               fg_color="#3A9E6F", hover_color="#2E7D57", width=80, height=28, corner_radius=4).pack(side=tk.LEFT, padx=4, pady=6)
 
+        ctk.CTkButton(menubar, text="✕", command=self.destroy, font=("Arial", 12, "bold"), fg_color="#3A9E6F",
+               hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side=tk.RIGHT, padx=4, pady = 6)
+        ctk.CTkButton(menubar, text="⛶", command=lambda: self.attributes("-fullscreen", not self.attributes("-fullscreen")), 
+                fg_color="#3A9E6F", hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side="right", pady=6)
+    
     def set_region(self, region):
         print(f"Region set to: {region}")
         self.region_var = region
@@ -274,6 +277,46 @@ class Application(ctk.CTk):
 
         filter_entry.bind("<Key>", lambda e: self.after(10, render))
         render()
+    def show_saved_page(self):
+        if hasattr(self, 'saved_page'):
+            self.saved_page.destroy()
+        self.saved_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
+        self.saved_page.place(x=0, y=40, relwidth=1, relheight=1)
+        ctk.CTkButton(self.saved_page, text="← Back",
+                   command=lambda: self.show_page(self.search_page),
+                   fg_color="#3A9E6F", hover_color="#2E7D57", width=80).pack(anchor="w", padx=40, pady=20)
+        ctk.CTkLabel(self.saved_page, text="Saved Ingredients", font=("Arial", 32, "bold"), text_color="#3E81BC").pack(anchor="w", padx=40)
+
+        saved = db.fetch_saved()
+        if saved.empty:
+            ctk.CTkLabel(self.saved_page, text="No saved ingredients yet.", font=("Arial", 20), text_color="#3E81BC").pack(anchor="w", padx=40, pady=20)
+            self.show_page(self.saved_page)
+            return
+
+        scroll = ctk.CTkScrollableFrame(self.saved_page, fg_color="#fdfbee")
+        scroll.pack(fill="both", expand=True, padx=40, pady=(20, 20))
+
+        def remove_saved(name):
+            db.unsave_food(name)
+            self.show_saved_page()
+
+        for name in saved["name"]:
+            row_frame = ctk.CTkFrame(scroll, fg_color="transparent")
+            row_frame.pack(fill="x", pady=4)
+            ctk.CTkButton(row_frame, text="✕", command=lambda n=name: remove_saved(n),
+                          font=("Arial", 20, "bold"), width=40, fg_color="#f0f0e8",
+                          text_color="#CC4444", hover_color="#d8d8cc").pack(side="right", padx=(8, 0))
+            name_btn = ctk.CTkButton(row_frame, text=name, command=lambda n=name: self.show_results(n),
+                                     font=("Arial", 30, "bold"), fg_color="#f0f0e8", text_color="#3E81BC",
+                                     hover_color="#d8d8cc", anchor="w")
+            # food may have been removed from the database by a CSV rebuild
+            if name not in self.food_names:
+                name_btn.configure(state="disabled")
+            name_btn.pack(side="left", fill="x", expand=True)
+
+        self._bind_scroll(scroll)
+        self.show_page(self.saved_page)
+
 
     def display_results_page(self):
         self.results_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
@@ -381,6 +424,20 @@ class Application(ctk.CTk):
                                       , hover_color="#e8e8e0")
         more_btn.pack(padx = 16,pady=(4, 16))
 
+        if is_selected:
+            name = row["name"]
+            def toggle_save():
+                if db.is_saved(name):
+                    db.unsave_food(name)
+                    save_btn.configure(text="☆ Save")
+                else:
+                    db.save_food(name)
+                    save_btn.configure(text="★ Saved")
+            save_btn = ctk.CTkButton(parent, text="★ Saved" if db.is_saved(name) else "☆ Save",
+                                     command=toggle_save, font=("Arial", 14, "bold"),
+                                     fg_color="#3A9E6F", hover_color="#2E7D57", text_color="white")
+            save_btn.pack(padx=16, pady=(0, 16))
+
 
     def build_substitute_card_numerical(self, parent, item):
         top = ctk.CTkFrame(parent, fg_color="transparent")
@@ -392,6 +449,19 @@ class Application(ctk.CTk):
         score = round(item[1]*100)
         score_color = "#3A9E6F" if score >= 75 else "#E8A020" if score >= 50 else "#CC4444"
         ctk.CTkLabel(top, text=f"{score}% match", font=("Arial", 20, "bold"), text_color=score_color).pack(side="right")
+
+        sub_name = self.food_names[item[0]]
+        def toggle_save():
+            if db.is_saved(sub_name):
+                db.unsave_food(sub_name)
+                save_btn.configure(text="☆")
+            else:
+                db.save_food(sub_name)
+                save_btn.configure(text="★")
+        save_btn = ctk.CTkButton(top, text="★" if db.is_saved(sub_name) else "☆",
+                                 command=toggle_save, width=36, font=("Arial", 20),
+                                 fg_color="transparent", text_color="#3A9E6F", hover_color="#e8e8e0")
+        save_btn.pack(side="right", padx=(0, 8))
         #nothing for now
 
         food_data = db.search(self.food_names[item[0]])
