@@ -69,24 +69,30 @@ class Application(ctk.CTk):
         menubar.pack(fill=tk.X, side=tk.TOP)
         menubar.pack_propagate(False)
 
-        settings_button = tk.Menubutton(menubar, text="Settings", bg="#3A9E6F", fg="white", font=("Arial", 12, "bold"), relief="flat",
-                              activebackground="#2E7D57", activeforeground="white")
-        settings_button.pack(side=tk.LEFT, padx=10, pady = 6)
-        settings_menu = tk.Menu(settings_button, tearoff=0)
+        settings_menu = tk.Menu(self, tearoff=0)
         settings_menu.add_command(label="Region:", state="disabled")
         settings_menu.add_command(label="United States", command=lambda: self.set_region("United States"))
         settings_menu.add_command(label="Japan", command=lambda: self.set_region("Japan"))
         settings_menu.add_separator()
-        settings_button.config(menu=settings_menu)
+
+        def open_settings_menu():
+            x = settings_button.winfo_rootx()
+            y = settings_button.winfo_rooty() + settings_button.winfo_height()
+            settings_menu.tk_popup(x, y)
+
+        settings_button = ctk.CTkButton(menubar, text="Settings", command=open_settings_menu,
+        fg_color="#3A9E6F", hover_color="#2E7D57", font=("Arial", 18, "bold"),
+        width=100, height=28, corner_radius=4)
+        settings_button.pack(side=tk.LEFT, padx=6, pady=6)
 
         ctk.CTkButton(menubar, text="Categories", command=self.open_category_selector,
-                fg_color="#3A9E6F", hover_color="#2E7D57", font=("Arial", 12, "bold"),
-                width=90, height=28, corner_radius=4).pack(side=tk.LEFT, padx=10, pady=6)
+        fg_color="#3A9E6F", hover_color="#2E7D57", font=("Arial", 18, "bold"),
+        width=100, height=28, corner_radius=4).pack(side=tk.LEFT, padx=6, pady=6)
 
-        ctk.CTkButton(menubar, text="✕", command=self.destroy, font=("Arial", 12, "bold"), fg_color="#3A9E6F",
-               hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side=tk.RIGHT, padx=4, pady = 6)
+        ctk.CTkButton(menubar, text="✕", command=self.destroy, font=("Arial", 14, "bold"), fg_color="#3A9E6F",
+        hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side=tk.RIGHT, padx=4, pady=6)
         ctk.CTkButton(menubar, text="⛶", command=lambda: self.attributes("-fullscreen", not self.attributes("-fullscreen")),
-                fg_color="#3A9E6F", hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side="right", pady=6)
+        fg_color="#3A9E6F", hover_color="#2E7D57", width=36, height=28, corner_radius=4).pack(side="right", pady=6)
 
     def set_region(self, region):
         print(f"Region set to: {region}")
