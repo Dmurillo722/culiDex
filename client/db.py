@@ -49,6 +49,44 @@ _SAVED_DDL = """CREATE TABLE IF NOT EXISTS saved_foods (
                 saved_at TEXT DEFAULT CURRENT_TIMESTAMP)"""
 
 
+_RECENT_DDL = """CREATE TABLE IF NOT EXISTS recent_searches (
+                name TEXT PRIMARY KEY,
+                searched_at TEXT DEFAULT CURRENT_TIMESTAMP)"""
+
+def add_recent_search(name: str):
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(_RECENT_DDL)
+    conn.execute("""INSERT INTO recent_searches (name, searched_at)
+                     VALUES (?, CURRENT_TIMESTAMP)
+                     ON CONFLICT(name) DO UPDATE SET searched_at = CURRENT_TIMESTAMP""", (name,))
+    
+    # 5 most recent searches only
+    conn.execute("""DELETE FROM recent_searches
+                     WHERE name NOT IN (
+                         SELECT name FROM recent_searches
+                         ORDER BY searched_at DESC, rowid DESC
+                         LIMIT 5
+                     )""")
+    conn.commit()
+    conn.close()
+
+
+def delete_recent_search(name: str):
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(_RECENT_DDL)
+    conn.execute("DELETE FROM recent_searches WHERE name = ?", (name,))
+    conn.commit()
+    conn.close()
+
+
+def fetch_recent() -> pd.DataFrame:
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(_RECENT_DDL)
+    df = pd.read_sql("SELECT name FROM recent_searches ORDER BY searched_at DESC, rowid DESC LIMIT 5", conn)
+    conn.close()
+    return df
+
+
 def save_food(name: str):
     conn = sqlite3.connect(DB_PATH)
     conn.execute(_SAVED_DDL)

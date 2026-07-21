@@ -21,7 +21,7 @@ class Application(ctk.CTk):
         self.region_var = "United States"
         self.bind_all("<Button-1>", lambda event: event.widget.focus_set() if hasattr(event.widget, 'focus_set') else None)
         self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
-        self.create_widgets()
+        # self.create_widgets()
         #fetch once and reuse for both matrix and food names
         _df = db.fetch_all()
         #build numpy matrix on initialization for faster querying and rust bindings
@@ -32,6 +32,8 @@ class Application(ctk.CTk):
         #tracks which categories the user currently wants included in similarity search
         #kept in sync with the checkboxes in the category selector panel
         self.selected_categories = set(self.cat_map.keys())
+        self.create_widgets()
+
 
     def create_widgets(self):
         self.build_menu()
@@ -200,6 +202,11 @@ class Application(ctk.CTk):
         self.search_error_label = ctk.CTkLabel(self.search_page, text="", font=("Arial", 12), text_color="red")
         self.search_error_label.pack()
     
+        self.recent_frame = ctk.CTkFrame(self.search_page, fg_color="#f0f0e8", corner_radius=8, width=450)
+        self.recent_frame.pack(pady=(16, 0))
+        self.recent_frame.pack_propagate(False)
+        self.refresh_recent_searches()
+
     def build_disambiguation_page(self, matches):
         if hasattr(self, 'disambiguation_page'):
             self.disambiguation_page.destroy()
@@ -277,6 +284,7 @@ class Application(ctk.CTk):
 
         filter_entry.bind("<Key>", lambda e: self.after(10, render))
         render()
+
     def show_saved_page(self):
         if hasattr(self, 'saved_page'):
             self.saved_page.destroy()
@@ -317,6 +325,39 @@ class Application(ctk.CTk):
         self._bind_scroll(scroll)
         self.show_page(self.saved_page)
 
+    def refresh_recent_searches(self):
+        for widget in self.recent_frame.winfo_children():
+            widget.destroy()
+
+        recent = db.fetch_recent()
+        if recent.empty:
+            self.recent_frame.pack_forget()
+            return
+
+        self.recent_frame.pack(pady=(16, 0))
+        ctk.CTkLabel(self.recent_frame, text="Recently Searched:", font=("Arial", 18, "bold"),
+                     text_color="#3E81BC").pack(pady=(10, 4))
+
+        def remove_recent(n):
+            db.delete_recent_search(n)
+            self.refresh_recent_searches()
+
+        for name in recent["name"]:
+            row_frame = ctk.CTkFrame(self.recent_frame, fg_color="transparent")
+            row_frame.pack(fill="x", padx=8, pady=1)
+
+            ctk.CTkButton(row_frame, text="✕", command=lambda n=name: remove_recent(n),
+                          font=("Arial", 18, "bold"), width=22, height=22, fg_color="transparent",
+                          text_color="#CC4444", hover_color="#e0e0d4").pack(side="right")
+
+            btn = ctk.CTkButton(row_frame, text=name, command=lambda n=name: self.show_results(n),
+                                 font=("Arial", 13), fg_color="transparent", text_color="#3E81BC",
+                                 hover_color="#e0e0d4", anchor="w", height=26)
+            if name not in self.food_names:
+                btn.configure(state="disabled")
+            btn.pack(side="left", fill="x", expand=True)
+
+        ctk.CTkFrame(self.recent_frame, fg_color="transparent", height=8).pack()
 
     def display_results_page(self):
         self.results_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
@@ -355,7 +396,9 @@ class Application(ctk.CTk):
             row = match.iloc[0]
             self.build_ingredient_card(self.left_panel, row, is_selected = True)
         
-        
+        db.add_recent_search(name)
+        self.after_idle(self.refresh_recent_searches)
+
         #dummy substitute ingredient information
         #dummy_results = [
         #    {"name": "Horseradish root", "score": 89},
