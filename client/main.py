@@ -19,11 +19,16 @@ class Application(ctk.CTk):
         self.attributes("-fullscreen", True)
         self.resizable(True, True)
         self.region_var = "United States"
+        self.region_sort_active = False
+        self.current_results = []
         self.bind_all("<Button-1>", lambda event: event.widget.focus_set() if hasattr(event.widget, 'focus_set') else None)
         self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
         # self.create_widgets()
         #fetch once and reuse for both matrix and food names
         _df = db.fetch_all()
+        self._df = _df
+        self.food_regions = None
+        self.available_regions = None
         #build numpy matrix on initialization for faster querying and rust bindings
         self.matrix = similarity._build_matrix(_df, similarity.WEIGHTS)
         #initialize food names numpy array for index accessing
@@ -73,11 +78,17 @@ class Application(ctk.CTk):
 
         settings_menu = tk.Menu(self, tearoff=0)
         settings_menu.add_command(label="Region:", state="disabled")
-        settings_menu.add_command(label="United States", command=lambda: self.set_region("United States"))
-        settings_menu.add_command(label="Japan", command=lambda: self.set_region("Japan"))
         settings_menu.add_separator()
 
+        region_menu_built = False
         def open_settings_menu():
+            nonlocal region_menu_built
+            if not region_menu_built:
+                self._get_food_regions()
+                for i, region in enumerate(self.available_regions):
+                    settings_menu.insert_command(i + 1, label=region,
+                        command=lambda r=region: self.set_region(r))
+                region_menu_built = True
             x = settings_button.winfo_rootx()
             y = settings_button.winfo_rooty() + settings_button.winfo_height()
             settings_menu.tk_popup(x, y)
@@ -103,14 +114,25 @@ class Application(ctk.CTk):
         print(f"Region set to: {region}")
         self.region_var = region
         self.region_label.configure(text=f"Current Region: {self.region_var}")
+        #keep the on-screen list in sync if region sorting is currently applied
+        if self.region_sort_active:
+            self._render_substitute_cards()
+
+    def _get_food_regions(self):
+        if self.food_regions is None:
+            self.food_regions = (self._df["country"].fillna("")
+                                 .replace("", "United States").to_numpy())
+            self.available_regions = sorted(set(self.food_regions))
+        return self.food_regions
+
+    def _rerank_by_region(self, results, region):
+    
+        if not region:
+            return results
+        regions = self._get_food_regions()
+        return sorted(results, key=lambda r: regions[r[0]] != region)
 
     def open_category_selector(self):
-        """
-        Opens a popup panel with a checkbox per food category (from self.cat_map).
-        Toggling a checkbox keeps self.selected_categories (a set of category name
-        strings) in sync. That set + self.cat_map is what the index array builder
-        will read from to know which indices to concatenate for the rust search.
-        """
         if hasattr(self, "category_selector_window") and self.category_selector_window.winfo_exists():
             self.category_selector_window.lift()
             self.category_selector_window.focus_force()
@@ -372,6 +394,12 @@ class Application(ctk.CTk):
         self.results_title = ctk.CTkLabel(top_row, text="",
                                            font=("Arial", 18, "bold"), text_color="#3E81BC")
         self.results_title.pack(side="left")
+
+        #on-demand region sorting for the substitute list below
+        self.region_sort_btn = ctk.CTkButton(top_row, text="Region first: Off",
+                       command=self.toggle_region_sort,
+                       fg_color="#3A9E6F", hover_color="#2E7D57", width=140)
+        self.region_sort_btn.pack(side="right")
         split_frame = ctk.CTkFrame(self.results_page, fg_color="#fdfbee")
         split_frame.pack(fill="both", expand=True, padx=40, pady=(0, 20))
         #left panel for searched ingredient
@@ -407,7 +435,24 @@ class Application(ctk.CTk):
         #]
 
         indices = similarity._build_index_list(self.cat_map, self.selected_categories)
-        results = similarity.get_substitutes(name, self.food_names, indices, self.matrix,top_n=30)
+        #raw similarity order kept so the region toggle can re-render without re-searching
+        self.current_results = similarity.get_substitutes(name, self.food_names, indices, self.matrix,top_n=30)
+        self._render_substitute_cards()
+        self.show_page(self.results_page)
+
+    def toggle_region_sort(self):
+        self.region_sort_active = not self.region_sort_active
+        self.region_sort_btn.configure(
+            text=f"Region first: {'On' if self.region_sort_active else 'Off'}")
+        self._render_substitute_cards()
+
+    def _render_substitute_cards(self):
+        for widget in self.right_panel.winfo_children():
+            widget.destroy()
+
+        results = self.current_results
+        if self.region_sort_active:
+            results = self._rerank_by_region(results, self.region_var)
 
         for item in results:
             card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
@@ -415,7 +460,6 @@ class Application(ctk.CTk):
             self.build_substitute_card_numerical(card, item)
 
         self._bind_scroll(self.right_panel)
-        self.show_page(self.results_page)
 
 
         #for item in results: #formerly dummy results
@@ -488,6 +532,11 @@ class Application(ctk.CTk):
 
         ctk.CTkLabel(top, text=self.
                     food_names[item[0]], font=("Arial", 24, "bold"), text_color="#3E81BC",).pack(side="left")
+
+        #small region tag next to the name, row-aligned with the similarity indices
+        region = self._get_food_regions()[item[0]]
+        ctk.CTkLabel(top, text=f" {region} ", font=("Arial", 14, "bold"), text_color="#6B8F71",
+                     fg_color="#e4efe0", corner_radius=6).pack(side="left", padx=(10, 0))
 
         score = round(item[1]*100)
         score_color = "#3A9E6F" if score >= 75 else "#E8A020" if score >= 50 else "#CC4444"
