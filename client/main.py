@@ -38,6 +38,7 @@ class Application(ctk.CTk):
         #kept in sync with the checkboxes in the category selector panel
         self.selected_categories = set(self.cat_map.keys())
         self.create_widgets()
+        self.recent_cache = similarity.recentCache(10)
 
 
     def create_widgets(self):
@@ -196,6 +197,8 @@ class Application(ctk.CTk):
     def get_selected_categories(self):
         """Returns a copy of the category names currently checked in the selector."""
         return set(self.selected_categories)
+    
+
 
     def build_search_page(self):
         self.search_page = ctk.CTkFrame(self, fg_color="#fdfbee", corner_radius=0)
@@ -433,10 +436,15 @@ class Application(ctk.CTk):
         #    {"name": "Ginger root",      "score": 68},
         #    {"name": "Mustard seed",     "score": 49},
         #]
+        hit_or_miss = self.recent_cache.get(name, self.selected_categories)
+        if not hit_or_miss:
+            indices = similarity._build_index_list(self.cat_map, self.selected_categories)
+            #raw similarity order kept so the region toggle can re-render without re-searching
+            self.current_results = similarity.get_substitutes(name, self.food_names, indices, self.matrix,top_n=30)
+            self.recent_cache.put(name, self.current_results, self.selected_categories)
+        else:
+            self.current_results = hit_or_miss.get_entries()
 
-        indices = similarity._build_index_list(self.cat_map, self.selected_categories)
-        #raw similarity order kept so the region toggle can re-render without re-searching
-        self.current_results = similarity.get_substitutes(name, self.food_names, indices, self.matrix,top_n=30)
         self._render_substitute_cards()
         self.show_page(self.results_page)
 

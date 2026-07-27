@@ -4,10 +4,11 @@ import pandas as pd
 from scipy.stats import zscore
 import culidex
 import numpy.typing as npt
+from collections import OrderedDict
 
 WEIGHTS = np.array([
     #0.00,  # category        — categorical, excluded
-    1.00,  # energy_kcal     — redundant with macro sum
+    0.00,  # energy_kcal     — redundant with macro sum
     1.50,  # water_g         — concentration/intensity multiplier
     3.50,  # protein_g       — umami potential, Maillard character
     4.00,  # fat_total_g     — richness, mouthfeel
@@ -112,6 +113,61 @@ def get_substitutes(foodName, food_names, indices, matrix, top_n):
     results = [(i, score) for i, score in results if i != query_ind]
 
     return results[:top_n]
+
+class cacheEntry:
+    
+    def __init__(self):
+        self.categories = set()
+        self.entries = []
+    
+    def get_categories(self):
+        return self.categories
+
+    def get_entries(self):
+        # return a copy so callers can't mutate the cached list in place
+        return list(self.entries)
+
+    def set_categories(self, new_cats):
+        self.categories = set(new_cats)
+
+    def set_entries(self, new_ents):
+        for i, score in new_ents:
+            self.entries.append((i, score))
+
+
+class recentCache:
+    def __init__(self, maxSize):
+        self.cache : OrderedDict[str , cacheEntry] = OrderedDict()
+        self.maxSize=maxSize
+
+    def get(self, foodName, categories):
+        #cache miss on foodname or categories have changed since last time
+        if foodName not in self.cache or self.cache[foodName].get_categories() != categories:
+            return None
+        
+        #key was most recently used 
+        self.cache.move_to_end(foodName)
+        return self.cache[foodName]
+    
+    def put(self, foodName, result, categories):
+        #if already in the cache and the categories are the same, move it to the end of the cache (most recently used)
+        if foodName in self.cache:
+            if self.cache[foodName].get_categories() == categories:
+                self.cache.move_to_end(foodName)
+                return #return ro prevent duplicate addition
+            else:
+                #categories have changed, remove the old entry
+                self.cache.pop(foodName)
+
+        elif len(self.cache) >= self.maxSize:
+            #remove the first item (leas)
+            self.cache.popitem(last=False)
+
+        #create the new cache entry and add it to the cache
+        entry = cacheEntry()
+        entry.set_categories(categories)
+        entry.set_entries(result)
+        self.cache[foodName] = entry
 
 
 #_df = db.fetch_all()
