@@ -13,6 +13,8 @@ ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("green")
 
 class Application(ctk.CTk):
+    CACHE_LIMIT = 8 # max widgets
+
     def __init__(self):
         ctk.CTk.__init__(self)
         self.title("CuliDex")
@@ -37,6 +39,16 @@ class Application(ctk.CTk):
         #tracks which categories the user currently wants included in similarity search
         #kept in sync with the checkboxes in the category selector panel
         self.selected_categories = set(self.cat_map.keys())
+        self._name_index = _df.drop_duplicates(subset="name", keep="first").set_index("name")
+
+        #cache the widgets for faster reload
+        self.card_cache = {}
+        self.ingredient_card_cache = {}
+        self._visible_cards = []
+        self._visible_ingredient_card = None
+        self.current_name = None
+        self._cache_order = []
+
         self.create_widgets()
         self.recent_cache = similarity.recentCache(10)
 
@@ -193,6 +205,7 @@ class Application(ctk.CTk):
             self.selected_categories.add(category)
         else:
             self.selected_categories.discard(category)
+        self._clear_widget_caches()
 
     def get_selected_categories(self):
         """Returns a copy of the category names currently checked in the selector."""
@@ -413,20 +426,72 @@ class Application(ctk.CTk):
         self.right_panel = ctk.CTkScrollableFrame(split_frame, fg_color="#fdfbee")
         self.right_panel.pack(side="right", fill="both", expand=True)
 
+    def _remember(self, name):
+        #LRU cache
+        if name in self._cache_order:
+            self._cache_order.remove(name)
+        self._cache_order.append(name)
+
+        while len(self._cache_order) > self.CACHE_LIMIT:
+            old = self._cache_order.pop(0)
+            for card in self.card_cache.pop(old, {}).values():
+                card.destroy()
+            old_card = self.ingredient_card_cache.pop(old, None)
+            if old_card is not None:
+                old_card.destroy()
+
+    def _clear_widget_caches(self):
+        for card in self._visible_cards:
+            card.pack_forget()
+        self._visible_cards = []
+
+        if self._visible_ingredient_card is not None:
+            self._visible_ingredient_card.pack_forget()
+            self._visible_ingredient_card = None
+
+        for cards in self.card_cache.values():
+            for card in cards.values():
+                card.destroy()
+        self.card_cache.clear()
+
+        for card in self.ingredient_card_cache.values():
+            card.destroy()
+        self.ingredient_card_cache.clear()
+        self._cache_order.clear()
+
+    def _get_ingredient_card(self, name):
+        card = self.ingredient_card_cache.get(name)
+        if card is None:
+            if name not in self._name_index.index:
+                return None
+            card = ctk.CTkFrame(self.left_panel, fg_color="#f0f0e8", corner_radius=0)
+            self.build_ingredient_card(card, self._name_index.loc[name], is_selected=True)
+            self.ingredient_card_cache[name] = card
+        return card
+
+    def _get_substitute_cards(self, name, results):
+        cards = self.card_cache.get(name)
+        if cards is None:
+            cards = {}
+            for item in results:
+                card = ctk.CTkFrame(self.right_panel, fg_color="#fdfbee", corner_radius=8)
+                self.build_substitute_card_numerical(card, item)
+                cards[item[0]] = card
+            self.card_cache[name] = cards
+        return cards
+
     def show_results(self, name):
-        #clear previous results
-        for widget in self.left_panel.winfo_children():
-            widget.destroy()
-        for widget in self.right_panel.winfo_children():
-            widget.destroy()
-        
+        self.current_name = name
         self.results_title.configure(text = f"Substitutes for: {name}", font=("Arial", 30, "bold"))
-        #retrieve ingredient information from db
-        match = db.search(name)
-        if not match.empty:
-            row = match.iloc[0]
-            self.build_ingredient_card(self.left_panel, row, is_selected = True)
-        
+
+        #swap the left panel card instead of destroying and rebuilding it
+        if self._visible_ingredient_card is not None:
+            self._visible_ingredient_card.pack_forget()
+        self._visible_ingredient_card = self._get_ingredient_card(name)
+        if self._visible_ingredient_card is not None:
+            self._visible_ingredient_card.pack(fill="both", expand=True)
+
+        self._remember(name)
         db.add_recent_search(name)
         self.after_idle(self.refresh_recent_searches)
 
@@ -455,26 +520,26 @@ class Application(ctk.CTk):
         self._render_substitute_cards()
 
     def _render_substitute_cards(self):
-        for widget in self.right_panel.winfo_children():
-            widget.destroy()
+        #hide the currently shown cards rather than destroying them
+        for card in self._visible_cards:
+            card.pack_forget()
+        self._visible_cards = []
+
+        if self.current_name is None:
+            return
+
+        cards = self._get_substitute_cards(self.current_name, self.current_results)
 
         results = self.current_results
         if self.region_sort_active:
             results = self._rerank_by_region(results, self.region_var)
 
         for item in results:
-            card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
-            card.pack(fill = 'x', pady =6)
-            self.build_substitute_card_numerical(card, item)
+            card = cards[item[0]]
+            card.pack(fill='x', pady=6)
+            self._visible_cards.append(card)
 
         self._bind_scroll(self.right_panel)
-
-
-        #for item in results: #formerly dummy results
-        #    card = ctk.CTkFrame(self.right_panel, fg_color= "#fdfbee", corner_radius= 8)
-        #    card.pack(fill = "x", pady = 6)
-        #    self.build_substitute_card(card, item)
-        #self.show_page(self.results_page)
 
     def build_ingredient_card(self, parent, row, is_selected = False):
         key_nutrients = [
@@ -493,7 +558,7 @@ class Application(ctk.CTk):
             ("Vitamin C", f"{row.get('vitamin_c_mg', 'N/A')} mg"),
             ("Zinc",      f"{row.get('zinc_mg', 'N/A')} mg")
         ]
-        ctk.CTkLabel(parent, text=row["name"], font=("Arial", 24, "bold"), text_color="#3E81BC", wraplength=220).pack(padx = 16, pady=(16, 8))
+        ctk.CTkLabel(parent, text=row.name, font=("Arial", 24, "bold"), text_color="#3E81BC", wraplength=220).pack(padx = 16, pady=(16, 8))
 
         for label, value in key_nutrients:
             row_frame = ctk.CTkFrame(parent, fg_color="#f0f0e8", height=24)
@@ -520,7 +585,7 @@ class Application(ctk.CTk):
         more_btn.pack(padx = 16,pady=(4, 16))
 
         if is_selected:
-            name = row["name"]
+            name = row.name
             def toggle_save():
                 if db.is_saved(name):
                     db.unsave_food(name)
@@ -564,13 +629,13 @@ class Application(ctk.CTk):
         save_btn.pack(side="right", padx=(0, 8))
         #nothing for now
 
-        food_data = db.search(self.food_names[item[0]])
-        calories = food_data.iloc[0]["energy_kcal"]
-        protein = food_data.iloc[0]["protein_g"]
-        fat = food_data.iloc[0]["fat_total_g"]
-        carbs = food_data.iloc[0]["carb_g"]
-        sodium = food_data.iloc[0]["sodium_mg"]
-        sugars = food_data.iloc[0]["sugars_total_g"]
+        food_row = self._name_index.loc[self.food_names[item[0]]]
+        calories = food_row["energy_kcal"]
+        protein = food_row["protein_g"]
+        fat = food_row["fat_total_g"]
+        carbs = food_row["carb_g"]
+        sodium = food_row["sodium_mg"]
+        sugars = food_row["sugars_total_g"]
 
         key_nutrients = [
             ("Calories", f"{calories} kcal"),
@@ -591,11 +656,11 @@ class Application(ctk.CTk):
             ctk.CTkLabel(row_frame, text=value, font=("Arial", 16, "bold"), text_color="#3E81BC", anchor="e").pack(side="right", pady=0)
 
         extra_nutrients = [
-            ("Potassium", f"{food_data.iloc[0]['potassium_mg']} mg"),
-            ("Calcium",   f"{food_data.iloc[0]['calcium_mg']} mg"),
-            ("Iron",      f"{food_data.iloc[0]['iron_mg']} mg"),
-            ("Vitamin C", f"{food_data.iloc[0]['vitamin_c_mg']} mg"),
-            ("Sugars",    f"{food_data.iloc[0]['sugars_total_g']} g"),
+            ("Potassium", f"{food_row['potassium_mg']} mg"),
+            ("Calcium",   f"{food_row['calcium_mg']} mg"),
+            ("Iron",      f"{food_row['iron_mg']} mg"),
+            ("Vitamin C", f"{food_row['vitamin_c_mg']} mg"),
+            ("Sugars",    f"{food_row['sugars_total_g']} g"),
         ]
 
         for label, value in extra_nutrients:
@@ -663,6 +728,7 @@ class Application(ctk.CTk):
         more_btn = ctk.CTkButton(parent, text="+ More", command=toggle_extra, font=("Arial", 14), fg_color="transparent", text_color="#3A9E6F"
                                       , hover_color="#e8e8e0")
         more_btn.pack(padx = 16,pady=(0, 12))
+        
     def _search(self):
         ingredient = self.search_entry.get().strip()
         #result = culidex.test_search()
