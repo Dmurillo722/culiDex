@@ -1,6 +1,6 @@
 venv/
 tempData/
-data/
+/data/
 .DS_Store
 .venv
 /target
