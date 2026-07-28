@@ -3,7 +3,7 @@ use std::collections::BinaryHeap;
 use std::cmp::Reverse;
 
 #[pymodule]
-mod culidex {
+mod _culidex {
     use pyo3::prelude::*;
     use std::collections::BinaryHeap;
     use std::cmp::Reverse;

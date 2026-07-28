@@ -1,10 +1,11 @@
 import numpy as np
-import db
 import pandas as pd
 from scipy.stats import zscore
-import culidex
 import numpy.typing as npt
 from collections import OrderedDict
+
+from . import db
+from . import _culidex as culidex
 
 WEIGHTS = np.array([
     #0.00,  # category        — categorical, excluded
@@ -83,7 +84,7 @@ def _build_matrix(df : pd.DataFrame, weights : np.array):
 def _build_category_mapping(df):
     """
     Builds a mapping in the form of:
-    
+
     Category name - > (all corresponding indices of foods that fall in that category)
     """
 
@@ -96,9 +97,9 @@ def _build_index_list(cat_dict : dict[str,npt.NDArray[np.int32]], categories : s
     to pass to the rust similarity calculator
     """
     arrays = [cat_dict[cat] for cat in categories]
-    if not arrays: 
+    if not arrays:
         return np.array([], dtype=np.int64)
-    
+
     return np.concatenate(arrays)
 
 
@@ -116,11 +117,11 @@ def get_substitutes(foodName, food_names, indices, matrix, top_n):
     return results[:top_n]
 
 class cacheEntry:
-    
+
     def __init__(self):
         self.categories = set()
         self.entries = []
-    
+
     def get_categories(self):
         return self.categories
 
@@ -145,11 +146,11 @@ class recentCache:
         #cache miss on foodname or categories have changed since last time
         if foodName not in self.cache or self.cache[foodName].get_categories() != categories:
             return None
-        
-        #key was most recently used 
+
+        #key was most recently used
         self.cache.move_to_end(foodName)
         return self.cache[foodName]
-    
+
     def put(self, foodName, result, categories):
         #if already in the cache and the categories are the same, move it to the end of the cache (most recently used)
         if foodName in self.cache:

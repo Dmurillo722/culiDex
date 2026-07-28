@@ -1,9 +1,10 @@
 venv/
 tempData/
 data/
-.DS_Stores
+.DS_Store
 .venv
-Cargo.lock
 /target
 .github
-client/__pycache__/
+**/__pycache__/
+.toolchain.env
+*.egg-info/

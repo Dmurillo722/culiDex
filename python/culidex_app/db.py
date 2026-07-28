@@ -1,13 +1,30 @@
+import shutil
 import sqlite3
+from importlib import resources
+from pathlib import Path
+
 import pandas as pd
-
-
-CSV_PATH_JAPAN = './data/japan_foods.csv'
-CSV_PATH_STARTING = './data/starting_database.csv'
-DB_PATH = './data/data.db'
-
+from platformdirs import user_data_dir
 
 """ Python functions for database access. Uses pandas for now"""
+
+# Dev-only paths, used by load_csv_to_db() to rebuild the seed database from
+# the source CSVs. Only valid when run from the repository root (not once
+# installed as a package) — this is a maintainer utility, not a runtime path.
+CSV_PATH_JAPAN = './data/japan_foods.csv'
+CSV_PATH_STARTING = './data/starting_database.csv'
+
+# Runtime DB path: a per-user, writable copy of the pre-built database that
+# ships inside the installed package. Copied into place on first run so the
+# read-only installed package files are never written to.
+_DATA_DIR = Path(user_data_dir("culidex", appauthor=False))
+_DATA_DIR.mkdir(parents=True, exist_ok=True)
+DB_PATH = str(_DATA_DIR / "data.db")
+
+if not (_DATA_DIR / "data.db").exists():
+    _seed = resources.files(__package__) / "data" / "data.db"
+    with resources.as_file(_seed) as _seed_path:
+        shutil.copy(_seed_path, DB_PATH)
 
 # turns csv file into db file
 def load_csv_to_db():
@@ -31,7 +48,7 @@ def fetch_all() -> pd.DataFrame:
     return df
 
 
-def search(query: str) -> pd.DataFrame: 
+def search(query: str) -> pd.DataFrame:
     conn = sqlite3.connect(DB_PATH)
     q = f"%{query}%"
 
@@ -59,7 +76,7 @@ def add_recent_search(name: str):
     conn.execute("""INSERT INTO recent_searches (name, searched_at)
                      VALUES (?, CURRENT_TIMESTAMP)
                      ON CONFLICT(name) DO UPDATE SET searched_at = CURRENT_TIMESTAMP""", (name,))
-    
+
     # 5 most recent searches only
     conn.execute("""DELETE FROM recent_searches
                      WHERE name NOT IN (

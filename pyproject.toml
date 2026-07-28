@@ -4,10 +4,24 @@ build-backend = "maturin"
 
 [project]
 name = "culidex"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
+dependencies = [
+    "customtkinter==5.2.2",
+    "darkdetect==0.8.0",
+    "numpy==2.4.6",
+    "pandas==3.0.3",
+    "scipy==1.18.0",
+    "platformdirs>=4.0",
+]
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dynamic = ["version"]
+
+[project.scripts]
+culidex = "culidex_app.main:run"
+
+[tool.maturin]
+python-source = "python"
+module-name = "culidex_app._culidex"

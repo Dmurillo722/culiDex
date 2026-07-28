@@ -1,12 +1,12 @@
-import tkinter as tk       
+import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
-from pathlib import Path
-import similarity
+from importlib import resources
 import sys
 
-import culidex
-import db
+from . import similarity
+from . import db
+from . import _culidex as culidex
 
 
 ctk.set_appearance_mode("light")
@@ -220,8 +220,9 @@ class Application(ctk.CTk):
         
         ctk.CTkLabel(self.search_page, text="CuliDex", font=("Arial", 38, "bold"), text_color="#3E81BC").pack(pady=(80, 0))
         
-        logo_path = Path(__file__).parent / "assets" / "logo.png"
-        logo_img = tk.PhotoImage(file=str(logo_path))
+        logo_ref = resources.files(__package__) / "assets" / "logo.png"
+        with resources.as_file(logo_ref) as logo_path:
+            logo_img = tk.PhotoImage(file=str(logo_path))
         logo_label = tk.Label(self.search_page, image=logo_img, bg="#fdfbee")
         logo_label.image = logo_img
         logo_label.pack(pady=(8, 16))
@@ -746,5 +747,11 @@ class Application(ctk.CTk):
             self.show_page(self.disambiguation_page)
 
 
-app = Application()
-app.mainloop()
+def run():
+    """Entry point used by the installed `culidex` console script."""
+    app = Application()
+    app.mainloop()
+
+
+if __name__ == "__main__":
+    run()
