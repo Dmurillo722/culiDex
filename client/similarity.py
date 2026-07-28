@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 WEIGHTS = np.array([
     #0.00,  # category        — categorical, excluded
-    0.00,  # energy_kcal     — redundant with macro sum
+    1.00,  # energy_kcal     — redundant with macro sum
     1.50,  # water_g         — concentration/intensity multiplier
     3.50,  # protein_g       — umami potential, Maillard character
     4.00,  # fat_total_g     — richness, mouthfeel
@@ -88,6 +88,7 @@ def _build_category_mapping(df):
     """
 
     return {cat : np.where(df['category'] == cat)[0] for cat in df['category'].unique()}
+
 
 def _build_index_list(cat_dict : dict[str,npt.NDArray[np.int32]], categories : set[str]):
     """
