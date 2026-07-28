@@ -4,7 +4,7 @@
 #
 # Required toolchain (hard-checked by `make check`):
 #   C compiler : GCC 13.x/15.x   OR   Clang 20.x/21.x
-#   Python     : 3.12.x or 3.14.x
+#   Python     : 3.12.x, 3.13.x, or 3.14.x
 #   Rust       : 1.91.x, 1.93.x, or 1.95.x (rustc/cargo)
 # ============================================================================
 

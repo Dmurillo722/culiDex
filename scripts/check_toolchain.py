@@ -3,7 +3,7 @@
 
 Required (any ONE of each):
   C compiler : GCC 13.x / 15.x   OR   Clang 20.x / 21.x
-  Python     : 3.12.x or 3.14.x
+  Python     : 3.12.x, 3.13.x, or 3.14.x
   Rust       : 1.91.x, 1.93.x, or 1.95.x (rustc/cargo)
 
 Hard-fails (non-zero exit) with a specific, actionable message if nothing
@@ -15,13 +15,13 @@ import shutil
 import subprocess
 import sys
 
-ALLOWED_PY = {(3, 12), (3, 14)}
+ALLOWED_PY = {(3, 12), (3, 13), (3, 14)}
 ALLOWED_RUST = {(1, 91), (1, 93), (1, 95)}
 ALLOWED_GCC = {13, 15}
 ALLOWED_CLANG = {20, 21}
 
 CC_CANDIDATES = ["gcc-15", "gcc-13", "clang-21", "clang-20", "gcc", "clang", "cc"]
-PY_CANDIDATES = ["python3.14", "python3.12", "python3"]
+PY_CANDIDATES = ["python3.14", "python3.13", "python3.12", "python3"]
 
 
 def run_version(cmd):
@@ -90,7 +90,7 @@ def main():
     py = check_python()
     if not py:
         fail(
-            "No compatible Python found. Need 3.12.x or 3.14.x.\n"
+            "No compatible Python found. Need 3.12.x, 3.13.x, or 3.14.x.\n"
             "  Ubuntu/Mint: sudo add-apt-repository ppa:deadsnakes/ppa && "
             "sudo apt install python3.12"
         )
