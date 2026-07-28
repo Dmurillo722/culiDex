@@ -23,6 +23,18 @@ Runs toolchain check and `pip install .`, which builds the Rust extension
 and installs the whole project — including the `culidex_app` Python package and
 its runtime dependencies — as a single package.
 
+## Installation Package Executable (Desktop)
+[TODO: link to the released wheel]
+
+Built for the target systems (WSL2 Ubuntu, Ubuntu 22.04, Linux Mint 21.3) with:
+
+    make package
+
+Produces a wheel at `dist/culidex-<version>-<tag>.whl`. Install it directly on
+any of the target systems with a single command:
+
+    pip install dist/culidex-<version>-<tag>.whl
+
 ## Run
 One-line run command, from the project root, after building:
 

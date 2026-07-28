@@ -10,7 +10,7 @@
 
 SHELL := /bin/bash
 VENV  := venv
-.PHONY: all help check build install run rebuild-seed-db dist clean
+.PHONY: all help check build install run package rebuild-seed-db dist clean
 
 all: build
 
@@ -19,6 +19,7 @@ help:
 	@echo "make build           - dev build: venv + deps + maturin develop"
 	@echo "make install         - release path: builds a wheel and 'pip install's it"
 	@echo "make run             - run the app (dev build)"
+	@echo "make package         - build an installable wheel (dist/*.whl) for release"
 	@echo "make rebuild-seed-db - regenerate the bundled seed database from source CSVs"
 	@echo "make dist            - build a submission-ready tgz archive"
 	@echo "make clean           - remove venv/build artifacts"
@@ -48,6 +49,18 @@ install: .toolchain.env
 
 run:
 	@source $(VENV)/bin/activate && culidex
+
+# Builds a distributable installation package (wheel) for the target systems
+# (WSL2 Ubuntu, Ubuntu 22.04, Linux Mint 21.3). Upload dist/*.whl to a GitHub
+# Release and link it from README.md.
+package: .toolchain.env
+	@set -a && . ./.toolchain.env && set +a && \
+	$$PYTHON -m venv $(VENV) && \
+	source $(VENV)/bin/activate && \
+	pip install --upgrade pip maturin && \
+	CC=$$CC RUSTFLAGS="-C linker=$$CC" maturin build --release --out dist
+	@echo "Installation package built: dist/*.whl"
+	@echo "Upload this wheel to a GitHub Release and link it in README.md"
 
 # Dev-only: rebuild the writable runtime DB from the source CSVs, then copy it
 # back into the package as the new bundled seed for future builds.
