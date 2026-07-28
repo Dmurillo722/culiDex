@@ -24,7 +24,7 @@ and installs the whole project — including the `culidex_app` Python package an
 its runtime dependencies — as a single package.
 
 ## Installation Package Executable (Desktop)
-[TODO: link to the released wheel]
+(https://github.com/Dmurillo722/culiDex/releases/download/v1/culidex-0.1.0-cp313-cp313-manylinux_2_34_x86_64.whl)
 
 Built for the target systems (WSL2 Ubuntu, Ubuntu 22.04, Linux Mint 21.3) with:
 
